@@ -1067,3 +1067,243 @@ function setupUploadFunctionality(user) {
                     const roundedProgress = Math.round(progress);
                     
                     // Update progress bar
+                    progressBar.style.width = `${roundedProgress}%`;
+                    progressText.textContent = `${roundedProgress}%`;
+                    
+                    // Update progress details
+                    const transferred = formatFileSize(snapshot.bytesTransferred);
+                    const total = formatFileSize(snapshot.totalBytes);
+                    const speed = snapshot.bytesTransferred / (Date.now() - timestamp) * 1000;
+                    
+                    progressDetails.innerHTML = `
+                        ${transferred} / ${total} 
+                        | السرعة: ${formatFileSize(speed)}/ثانية
+                        | الوقت المتبقي: ${calculateTimeRemaining(progress, timestamp)}
+                    `;
+                },
+                (error) => {
+                    console.error('Upload error:', error);
+                    let errorMessage = 'حدث خطأ أثناء الرفع';
+                    
+                    if (error.code === 'storage/unauthorized') {
+                        errorMessage = 'غير مصرح بالرفع. تحقق من إعدادات Firebase Storage';
+                    } else if (error.code === 'storage/canceled') {
+                        errorMessage = 'تم إلغاء الرفع';
+                    } else if (error.code === 'storage/unknown') {
+                        errorMessage = 'خطأ غير معروف في التخزين';
+                    }
+                    
+                    showMessage(uploadMsg, `${errorMessage}: ${error.message}`, 'danger');
+                    uploadProgress.style.display = 'none';
+                    uploadBtn.disabled = false;
+                },
+                async () => {
+                    try {
+                        // Get download URL
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        
+                        // Save app data to Firestore
+                        await addDoc(collection(db, 'apps'), {
+                            name: appName,
+                            description: appDescription,
+                            fileUrl: downloadURL,
+                            fileName: uniqueFileName,
+                            originalFileName: appFile.name,
+                            fileSize: appFile.size,
+                            platforms: platforms,
+                            userId: user.uid,
+                            developerName: user.displayName || 'مطور',
+                            uploadDate: new Date().toLocaleString('ar-SA'),
+                            downloads: 0,
+                            lastDownload: null
+                        });
+                        
+                        // Success message
+                        showMessage(uploadMsg, 'تم رفع التطبيق بنجاح!', 'success');
+                        uploadProgress.style.display = 'none';
+                        uploadBtn.disabled = false;
+                        
+                        // Reset form
+                        resetUploadForm();
+                        
+                        // Reload apps list
+                        loadUserApps(user.uid);
+                        
+                    } catch (dbError) {
+                        console.error('Database error:', dbError);
+                        showMessage(uploadMsg, `تم رفع الملف ولكن حدث خطأ في حفظ البيانات: ${dbError.message}`, 'danger');
+                        uploadBtn.disabled = false;
+                    }
+                }
+            );
+            
+        } catch (error) {
+            console.error('Upload setup error:', error);
+            showMessage(uploadMsg, `خطأ في إعداد الرفع: ${error.message}`, 'danger');
+            uploadProgress.style.display = 'none';
+            uploadBtn.disabled = false;
+        }
+    });
+}
+
+// Calculate remaining time for upload
+function calculateTimeRemaining(progress, startTime) {
+    if (progress === 0) return 'جاري الحساب...';
+    
+    const elapsedTime = Date.now() - startTime;
+    const totalTime = elapsedTime / (progress / 100);
+    const remainingTime = totalTime - elapsedTime;
+    
+    const minutes = Math.floor(remainingTime / 60000);
+    const seconds = Math.floor((remainingTime % 60000) / 1000);
+    
+    if (minutes > 0) {
+        return `${minutes} دقيقة ${seconds} ثانية`;
+    } else {
+        return `${seconds} ثانية`;
+    }
+}
+
+// Reset upload form
+function resetUploadForm() {
+    document.getElementById('appName').value = '';
+    document.getElementById('appDescription').value = '';
+    document.getElementById('appFile').value = '';
+    document.getElementById('fileInfo').classList.remove('show');
+    document.querySelectorAll('.platform-option.selected').forEach(opt => opt.classList.remove('selected'));
+    document.getElementById('versionInputs').innerHTML = '';
+    document.getElementById('versionInputs').style.display = 'none';
+}
+
+// Load user's apps
+async function loadUserApps(userId) {
+    const appList = document.getElementById('appList');
+    
+    try {
+        const q = query(collection(db, 'apps'), where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            appList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا توجد تطبيقات مرفوعة بعد</h3>
+                    <p>ابدأ برفع أول تطبيق لك باستخدام الأداة أعلاه</p>
+                </div>
+            `;
+            return;
+        }
+        
+        appList.innerHTML = '';
+        
+        querySnapshot.forEach((docSnap) => {
+            const app = docSnap.data();
+            const platformsHtml = Object.entries(app.platforms || {}).map(([platform, version]) => `
+                <span class="compatibility-badge">
+                    <i class="fab fa-${platform}"></i>
+                    ${getPlatformName(platform)} ${version ? `- ${version}` : ''}
+                </span>
+            `).join('');
+            
+            const appDiv = document.createElement('div');
+            appDiv.className = 'app-item';
+            appDiv.innerHTML = `
+                <div class="app-header">
+                    <div class="app-name">${app.name}</div>
+                    <div class="app-downloads">${app.downloads || 0} <i class="fas fa-download"></i></div>
+                </div>
+                <div class="app-meta">
+                    <span><i class="far fa-calendar"></i> ${app.uploadDate}</span>
+                    <span><i class="fas fa-weight-hanging"></i> ${formatFileSize(app.fileSize)}</span>
+                    <span><i class="fas fa-user"></i> ${app.developerName}</span>
+                </div>
+                <div class="app-description">${app.description || 'لا يوجد وصف'}</div>
+                <div class="platforms">
+                    ${platformsHtml}
+                </div>
+                <div class="app-actions">
+                    <a href="${app.fileUrl}" download="${app.originalFileName || app.fileName}" class="btn btn-success btn-small" onclick="incrementDownload('${docSnap.id}')">
+                        <i class="fas fa-download"></i> تحميل
+                    </a>
+                    <button class="btn btn-danger btn-small" onclick="deleteApp('${docSnap.id}', '${app.fileName}')">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                </div>
+            `;
+            
+            appList.appendChild(appDiv);
+        });
+        
+    } catch (error) {
+        console.error('Error loading apps:', error);
+        appList.innerHTML = '<div class="alert alert-danger">حدث خطأ في تحميل التطبيقات</div>';
+    }
+}
+
+// Increment download counter
+async function incrementDownload(appId) {
+    try {
+        const appRef = doc(db, 'apps', appId);
+        const appDoc = await getDocs(query(collection(db, 'apps'), where('__name__', '==', appId)));
+        
+        if (!appDoc.empty) {
+            const currentDownloads = appDoc.docs[0].data().downloads || 0;
+            await updateDoc(appRef, {
+                downloads: currentDownloads + 1,
+                lastDownload: new Date().toISOString()
+            });
+        }
+    } catch (error) {
+        console.error('Error incrementing download:', error);
+    }
+}
+
+// Get platform display name
+function getPlatformName(platform) {
+    const names = {
+        android: 'أندرويد',
+        ios: 'iOS',
+        windows: 'ويندوز',
+        mac: 'ماك',
+        linux: 'لينكس'
+    };
+    return names[platform] || platform;
+}
+
+// Format file size
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Delete app function
+async function deleteApp(appId, fileName) {
+    if (confirm('هل أنت متأكد من حذف هذا التطبيق؟')) {
+        try {
+            // Delete from Storage
+            const fileRef = ref(storage, `apps/${auth.currentUser.uid}/${fileName}`);
+            await deleteObject(fileRef);
+            
+            // Delete from Firestore
+            await deleteDoc(doc(db, 'apps', appId));
+            
+            // Reload apps
+            loadUserApps(auth.currentUser.uid);
+            
+        } catch (error) {
+            console.error('Error deleting app:', error);
+            alert('حدث خطأ أثناء حذف التطبيق');
+        }
+    }
+}
+
+// Make functions globally available
+window.deleteApp = deleteApp;
+window.incrementDownload = incrementDownload;
+</script>
+
+</body>
+</html>
