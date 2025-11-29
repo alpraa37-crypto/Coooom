@@ -776,7 +776,7 @@
                 <input type="password" id="devPassword" placeholder="أنشئ كلمة مرور قوية">
             </div>
             
-            <button id="devRegisterBtn" class="btn btn-primary btn-full">
+            <button id="devRegisterBtn" class="btn btn-primary btn-full" onclick="registerDeveloper()">
                 <i class="fas fa-user-plus"></i> إنشاء حساب مطور
             </button>
             
@@ -811,7 +811,7 @@
                 <input type="password" id="devLoginPassword" placeholder="أدخل كلمة المرور">
             </div>
             
-            <button id="devLoginBtn" class="btn btn-primary btn-full">
+            <button id="devLoginBtn" class="btn btn-primary btn-full" onclick="loginDeveloper()">
                 <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
             </button>
             
@@ -846,7 +846,7 @@
                 <input type="email" id="userEmail" placeholder="أدخل بريدك الإلكتروني (اختياري)">
             </div>
             
-            <button id="userRegisterBtn" class="btn btn-primary btn-full">
+            <button id="userRegisterBtn" class="btn btn-primary btn-full" onclick="registerUser()">
                 <i class="fas fa-user-plus"></i> إنشاء حساب مستخدم
             </button>
 
@@ -928,7 +928,7 @@
                     </div>
                     <p>انقر لرفع صور التطبيق</p>
                     <small>يمكنك رفع multiple صور</small>
-                    <input type="file" id="appImages" multiple accept="image/*" style="display: none;">
+                    <input type="file" id="appImages" multiple accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
                 </div>
                 <div class="image-preview" id="imagePreview"></div>
             </div>
@@ -938,7 +938,7 @@
                 <input type="file" id="appFile" accept=".apk,.ipa,.exe,.dmg,.deb,.appimage,.zip">
             </div>
             
-            <button id="publishAppBtn" class="btn btn-primary btn-full">
+            <button id="publishAppBtn" class="btn btn-primary btn-full" onclick="publishApp()">
                 <i class="fas fa-paper-plane"></i> نشر التطبيق
             </button>
             
@@ -982,7 +982,7 @@
     <div class="container">
         <div class="search-container">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ابحث عن تطبيقات أو ألعاب...">
+                <input type="text" id="searchInput" placeholder="ابحث عن تطبيقات أو ألعاب..." oninput="handleSearch(event)">
                 <div class="search-icon">
                     <i class="fas fa-search"></i>
                 </div>
@@ -1017,9 +1017,9 @@
 </div>
 
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
 <script>
 // Firebase Configuration
@@ -1034,7 +1034,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.firestore();
 const storage = firebase.storage();
 
@@ -1047,27 +1049,15 @@ let selectedPlatforms = {};
 
 // التهيئة
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("تم تحميل الصفحة بنجاح");
     initializeApp();
 });
 
 function initializeApp() {
-    // إعداد الأحداث
-    setupEventListeners();
+    console.log("جاري تهيئة التطبيق...");
     
     // التحقق من المستخدم الحالي
     checkCurrentUser();
-}
-
-function setupEventListeners() {
-    // أحداث المطور
-    document.getElementById('devRegisterBtn').addEventListener('click', registerDeveloper);
-    document.getElementById('devLoginBtn').addEventListener('click', loginDeveloper);
-    
-    // أحداث المستخدم
-    document.getElementById('userRegisterBtn').addEventListener('click', registerUser);
-    
-    // بحث
-    document.getElementById('searchInput')?.addEventListener('input', handleSearch);
 }
 
 function checkCurrentUser() {
@@ -1083,11 +1073,15 @@ function checkCurrentUser() {
         } else {
             showUserDashboard();
         }
+    } else {
+        console.log("لا يوجد مستخدم مسجل، عرض الشاشة الرئيسية");
+        showScreen('welcomeScreen');
     }
 }
 
 // اختيار الدور
 function selectRole(role) {
+    console.log("تم اختيار الدور:", role);
     userRole = role;
     if (role === 'developer') {
         showScreen('developerAuth');
@@ -1098,9 +1092,13 @@ function selectRole(role) {
 
 // تسجيل المطور
 async function registerDeveloper() {
+    console.log("جاري تسجيل المطور...");
+    
     const name = document.getElementById('devName').value;
     const email = document.getElementById('devEmail').value;
     const password = document.getElementById('devPassword').value;
+    
+    console.log("بيانات المدخلات:", { name, email, password });
     
     if (!name || !email || !password) {
         showMessage('devAuthMsg', 'يرجى ملء جميع الحقول', 'danger');
@@ -1123,6 +1121,8 @@ async function registerDeveloper() {
             createdAt: new Date().toISOString()
         };
         
+        console.log("جاري حفظ المطور في قاعدة البيانات:", developer);
+        
         // حفظ المطور في Firebase
         await db.collection('users').add(developer);
         
@@ -1138,12 +1138,14 @@ async function registerDeveloper() {
         
     } catch (error) {
         console.error('Error registering developer:', error);
-        showMessage('devAuthMsg', 'حدث خطأ أثناء إنشاء الحساب', 'danger');
+        showMessage('devAuthMsg', 'حدث خطأ أثناء إنشاء الحساب: ' + error.message, 'danger');
     }
 }
 
 // تسجيل الدخول للمطور
 async function loginDeveloper() {
+    console.log("جاري تسجيل الدخول للمطور...");
+    
     const email = document.getElementById('devLoginEmail').value;
     const password = document.getElementById('devLoginPassword').value;
     
@@ -1154,7 +1156,7 @@ async function loginDeveloper() {
     
     try {
         const snapshot = await db.collection('users').get();
-        const users = snapshot.docs.map(doc => doc.data());
+        const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         const developer = users.find(user => 
             user.email === email && 
@@ -1177,6 +1179,8 @@ async function loginDeveloper() {
 
 // تسجيل المستخدم
 async function registerUser() {
+    console.log("جاري تسجيل المستخدم...");
+    
     const name = document.getElementById('userName').value || 'مستخدم مجهول';
     const email = document.getElementById('userEmail').value || `user_${generateId()}@capncom.com`;
     
@@ -1212,6 +1216,8 @@ async function registerUser() {
 
 // الدخول كمستخدم مجهول
 function loginAsAnonymousUser() {
+    console.log("جاري الدخول كمستخدم مجهول...");
+    
     const user = {
         id: generateId(),
         name: 'مستخدم مجهول',
@@ -1234,18 +1240,18 @@ function saveUserLocal(user) {
 
 // عرض لوحة المطور
 function showDeveloperDashboard() {
+    console.log("عرض لوحة المطور...");
     showScreen('developerDashboard');
     document.getElementById('devAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
     loadDeveloperApps();
-    setupAppUpload();
 }
 
 // عرض لوحة المستخدم
 function showUserDashboard() {
+    console.log("عرض لوحة المستخدم...");
     showScreen('userDashboard');
     document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
     loadAllApps();
-    setupSearch();
 }
 
 // تبديل نظام التشغيل
@@ -1328,40 +1334,33 @@ function getVersionPlaceholder(platform) {
     return placeholders[platform] || 'أدخل الإصدار المطلوب';
 }
 
-// إعداد رفع التطبيق
-function setupAppUpload() {
-    const appImagesInput = document.getElementById('appImages');
+// معالجة رفع الصور
+function handleImageUpload(event) {
+    selectedAppImages = Array.from(event.target.files);
     const imagePreview = document.getElementById('imagePreview');
-    const publishBtn = document.getElementById('publishAppBtn');
+    imagePreview.innerHTML = '';
     
-    // معاينة الصور
-    appImagesInput.addEventListener('change', (e) => {
-        selectedAppImages = Array.from(e.target.files);
-        imagePreview.innerHTML = '';
-        
-        selectedAppImages.forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const previewItem = document.createElement('div');
-                previewItem.className = 'preview-item';
-                previewItem.innerHTML = `
-                    <img src="${e.target.result}" alt="Preview">
-                    <button type="button" class="remove-image" onclick="removeImage(${index})">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                imagePreview.appendChild(previewItem);
-            };
-            reader.readAsDataURL(file);
-        });
+    selectedAppImages.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.innerHTML = `
+                <img src="${e.target.result}" alt="Preview">
+                <button type="button" class="remove-image" onclick="removeImage(${index})">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            imagePreview.appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
     });
-    
-    // نشر التطبيق
-    publishBtn.addEventListener('click', publishApp);
 }
 
 // نشر التطبيق
 async function publishApp() {
+    console.log("جاري نشر التطبيق...");
+    
     const appName = document.getElementById('appName').value;
     const appDescription = document.getElementById('appDescription').value;
     const appFile = document.getElementById('appFile').files[0];
@@ -1634,13 +1633,8 @@ async function downloadApp(fileUrl, fileName, appId) {
 }
 
 // البحث
-function setupSearch() {
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', handleSearch);
-}
-
-function handleSearch(e) {
-    const searchTerm = e.target.value.toLowerCase();
+function handleSearch(event) {
+    const searchTerm = event.target.value.toLowerCase();
     const appCards = document.querySelectorAll('.app-card');
     
     appCards.forEach(card => {
@@ -1769,6 +1763,14 @@ window.downloadApp = downloadApp;
 window.goBack = goBack;
 window.goBackToWelcome = goBackToWelcome;
 window.logout = logout;
+window.registerDeveloper = registerDeveloper;
+window.loginDeveloper = loginDeveloper;
+window.registerUser = registerUser;
+window.publishApp = publishApp;
+window.handleImageUpload = handleImageUpload;
+window.handleSearch = handleSearch;
+
+console.log("تم تحميل جميع الدوال بنجاح");
 </script>
 </body>
 </html>
