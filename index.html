@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapNCom - منصة رفع التطبيقات المتقدمة</title>
+    <title>CAPNCom - منصة التطبيقات والألعاب الآمنة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -43,6 +43,7 @@
             padding: 20px;
         }
 
+        /* Header Styles */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -80,6 +81,7 @@
             z-index: 1;
         }
 
+        /* Card Styles */
         .card {
             background: white;
             padding: 30px;
@@ -106,6 +108,7 @@
             color: var(--secondary);
         }
 
+        /* Form Styles */
         .form-group {
             margin-bottom: 20px;
         }
@@ -135,6 +138,7 @@
             background-color: white;
         }
 
+        /* Button Styles */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -198,51 +202,275 @@
             font-size: 0.9rem;
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
+        /* Role Selection */
+        .role-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .role-card {
+            border: 3px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .role-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .role-card.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .role-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .role-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .role-description {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-right: 50px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             color: var(--gray);
         }
 
-        .divider::before, .divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background-color: #ddd;
+        /* Apps Grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
 
-        .divider span {
-            padding: 0 15px;
+        .app-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .app-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .app-info {
+            padding: 20px;
+        }
+
+        .app-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .app-developer {
+            color: var(--gray);
             font-size: 0.9rem;
+            margin-bottom: 10px;
         }
 
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .app-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .app-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* App Details */
+        .app-details {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .app-hero {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .app-hero-content {
             text-align: center;
-            font-weight: 500;
+            z-index: 2;
         }
 
-        .alert-success {
-            background-color: rgba(76, 201, 240, 0.15);
-            color: #0a9396;
-            border: 1px solid rgba(76, 201, 240, 0.3);
+        .app-hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
         }
 
-        .alert-danger {
-            background-color: rgba(230, 57, 70, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(230, 57, 70, 0.2);
+        .app-hero-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .alert-info {
-            background-color: rgba(67, 97, 238, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(67, 97, 238, 0.2);
+        .app-hero-developer {
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
 
+        .app-content {
+            padding: 40px;
+        }
+
+        .app-screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .screenshot {
+            width: 100%;
+            height: 150px;
+            background: var(--light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 2rem;
+        }
+
+        .download-section {
+            background: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .download-btn {
+            font-size: 1.2rem;
+            padding: 15px 40px;
+        }
+
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Progress Bar */
         .progress-container {
             margin-top: 15px;
             display: none;
@@ -270,20 +498,66 @@
             color: var(--primary);
         }
 
-        .user-info {
+        /* Alert Styles */
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: rgba(76, 201, 240, 0.15);
+            color: #0a9396;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .alert-danger {
+            background-color: rgba(230, 57, 70, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(230, 57, 70, 0.2);
+        }
+
+        .alert-info {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        /* Navigation */
+        .nav-bar {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-user {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .user-avatar {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--gradient);
             display: flex;
@@ -291,210 +565,91 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 1.5rem;
         }
 
-        .user-details {
-            flex: 1;
-        }
-
-        .user-name {
-            font-weight: 700;
-            color: var(--dark);
-            font-size: 1.2rem;
-        }
-
-        .user-email {
-            color: var(--gray);
-            font-size: 0.95rem;
-        }
-
-        .app-item {
-            background: var(--light);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            border-left: 5px solid var(--primary);
-            transition: var(--transition);
-        }
-
-        .app-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .app-name {
-            font-weight: 700;
-            color: var(--dark);
-            font-size: 1.3rem;
-        }
-
-        .app-meta {
-            display: flex;
-            gap: 20px;
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-
-        .app-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .app-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .compatibility-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 12px;
-            background: rgba(67, 97, 238, 0.1);
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: #dee2e6;
-        }
-
-        .platform-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .platform-option {
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .platform-option:hover {
-            border-color: var(--primary);
-        }
-
-        .platform-option.selected {
-            border-color: var(--primary);
-            background: rgba(67, 97, 238, 0.1);
-        }
-
-        .platform-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-
-        .version-input {
-            display: none;
-            margin-top: 15px;
-        }
-
-        .file-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
+        /* Hidden Sections */
+        #welcomeScreen, #userRoleSelection, #developerAuth, #userAuth, #developerDashboard, #userDashboard, #appDetails {
             display: none;
         }
 
-        .file-info.show {
+        #welcomeScreen {
             display: block;
         }
 
-        .file-size-warning {
-            color: var(--warning);
-            font-weight: 600;
-        }
-
-        .file-size-success {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        #loginDiv, #registerDiv, #dashboard {
-            display: none;
-        }
-
-        .auth-switch {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .auth-switch a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .auth-switch a:hover {
-            text-decoration: underline;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+            .role-selection {
+                grid-template-columns: 1fr;
+            }
+            
+            .apps-grid {
+                grid-template-columns: 1fr;
             }
             
             .header h1 {
                 font-size: 2rem;
             }
             
-            .app-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .app-actions {
-                width: 100%;
-                justify-content: flex-end;
+            .app-hero-name {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- قسم تسجيل الدخول -->
-    <div id="loginDiv">
+<!-- الشاشة الرئيسية -->
+<div id="welcomeScreen">
+    <div class="container">
         <div class="header">
-            <h1><i class="fas fa-mobile-alt"></i> CapNCom</h1>
-            <p>منصة رفع التطبيقات المتقدمة - شارك تطبيقاتك مع العالم</p>
+            <h1><i class="fas fa-rocket"></i> CAPNCom</h1>
+            <p>منصة التطبيقات والألعاب الآمنة - انضم إلى مجتمعنا المتنامي</p>
         </div>
         
         <div class="card">
-            <h2><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h2>
+            <h2><i class="fas fa-door-open"></i> مرحباً بك في CAPNCom</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: var(--gray);">
+                اختر نوع الحساب المناسب لك للبدء
+            </p>
             
-            <button id="googleLoginBtn" class="btn btn-secondary btn-full">
-                <i class="fab fa-google"></i> تسجيل دخول باستخدام جوجل
+            <div class="role-selection">
+                <div class="role-card" onclick="selectRole('developer')">
+                    <div class="role-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="role-title">مطور</div>
+                    <div class="role-description">
+                        انشر تطبيقاتك وألعابك وشاركها مع العالم
+                    </div>
+                </div>
+                
+                <div class="role-card" onclick="selectRole('user')">
+                    <div class="role-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="role-title">مستخدم</div>
+                    <div class="role-description">
+                        استكشف وتحميل أفضل التطبيقات والألعاب
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- اختيار دور المطور -->
+<div id="developerAuth">
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i> المطورين</h1>
+            <p>انشر تطبيقاتك ووصلها إلى الملايين</p>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-user-tie"></i> حساب المطور</h2>
+            
+            <button id="googleDeveloperLogin" class="btn btn-secondary btn-full">
+                <i class="fab fa-google"></i> تسجيل دخول كمطور باستخدام جوجل
             </button>
             
             <div class="divider">
@@ -502,72 +657,201 @@
             </div>
             
             <div class="form-group">
-                <label for="loginEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني">
+                <label for="devName"><i class="fas fa-user"></i> اسم المطور</label>
+                <input type="text" id="devName" placeholder="أدخل اسمك كمطور">
             </div>
             
             <div class="form-group">
-                <label for="loginPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
-                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور">
+                <label for="devEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <input type="email" id="devEmail" placeholder="أدخل بريدك الإلكتروني">
             </div>
             
-            <button id="emailLoginBtn" class="btn btn-primary btn-full">
-                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            <div class="form-group">
+                <label for="devPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
+                <input type="password" id="devPassword" placeholder="أنشئ كلمة مرور قوية">
+            </div>
+            
+            <button id="devRegisterBtn" class="btn btn-primary btn-full">
+                <i class="fas fa-user-plus"></i> إنشاء حساب مطور
             </button>
             
-            <div id="loginMsg" class="alert alert-danger" style="display: none;"></div>
-
             <div class="auth-switch">
-                <p>ليس لديك حساب؟ <a id="showRegister">إنشاء حساب جديد</a></p>
+                <p>لديك حساب مطور؟ <a onclick="showDeveloperLogin()">تسجيل الدخول</a></p>
             </div>
+            
+            <div id="devAuthMsg" class="alert alert-danger" style="display: none;"></div>
         </div>
     </div>
+</div>
 
-    <!-- قسم إنشاء حساب -->
-    <div id="registerDiv">
+<!-- اختيار دور المستخدم -->
+<div id="userAuth">
+    <div class="container">
         <div class="header">
-            <h1><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h1>
-            <p>انضم إلى منصة CapNCom وابدأ برفع تطبيقاتك</p>
+            <h1><i class="fas fa-user"></i> المستخدمين</h1>
+            <p>اكتشف عالم التطبيقات والألعاب المذهل</p>
         </div>
         
         <div class="card">
-            <h2><i class="fas fa-user-circle"></i> إنشاء حساب</h2>
+            <h2><i class="fas fa-user-circle"></i> حساب المستخدم</h2>
             
-            <div class="form-group">
-                <label for="registerName"><i class="fas fa-user"></i> اسم التطبيق/المطور</label>
-                <input type="text" id="registerName" placeholder="أدخل اسم التطبيق أو اسم المطور">
-            </div>
-            
-            <div class="form-group">
-                <label for="registerEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                <input type="email" id="registerEmail" placeholder="أدخل بريدك الإلكتروني">
-            </div>
-            
-            <div class="form-group">
-                <label for="registerPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
-                <input type="password" id="registerPassword" placeholder="أنشئ كلمة مرور قوية">
-            </div>
-            
-            <div class="form-group">
-                <label for="registerConfirmPassword"><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
-                <input type="password" id="registerConfirmPassword" placeholder="أعد إدخال كلمة المرور">
-            </div>
-            
-            <button id="registerBtn" class="btn btn-primary btn-full">
-                <i class="fas fa-user-plus"></i> إنشاء حساب
+            <button id="googleUserLogin" class="btn btn-secondary btn-full">
+                <i class="fab fa-google"></i> تسجيل دخول كمستخدم باستخدام جوجل
             </button>
             
-            <div id="registerMsg" class="alert alert-danger" style="display: none;"></div>
-
+            <div class="divider">
+                <span>أو</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="userName"><i class="fas fa-user"></i> اسم المستخدم</label>
+                <input type="text" id="userName" placeholder="أدخل اسمك">
+            </div>
+            
+            <div class="form-group">
+                <label for="userEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <input type="email" id="userEmail" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+            
+            <div class="form-group">
+                <label for="userPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
+                <input type="password" id="userPassword" placeholder="أنشئ كلمة مرور">
+            </div>
+            
+            <button id="userRegisterBtn" class="btn btn-primary btn-full">
+                <i class="fas fa-user-plus"></i> إنشاء حساب مستخدم
+            </button>
+            
             <div class="auth-switch">
-                <p>لديك حساب بالفعل؟ <a id="showLogin">تسجيل الدخول</a></p>
+                <p>لديك حساب مستخدم؟ <a onclick="showUserLogin()">تسجيل الدخول</a></p>
+            </div>
+            
+            <div id="userAuthMsg" class="alert alert-danger" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- لوحة تحكم المطور -->
+<div id="developerDashboard">
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <div class="nav-logo">CAPNCom - المطور</div>
+            <div class="nav-user">
+                <div class="user-avatar" id="devAvatar">M</div>
+                <button class="btn btn-outline btn-small" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="card">
+            <h2><i class="fas fa-plus-circle"></i> إضافة تطبيق جديد</h2>
+            
+            <div class="form-group">
+                <label for="appName"><i class="fas fa-cube"></i> اسم التطبيق</label>
+                <input type="text" id="appName" placeholder="أدخل اسم التطبيق">
+            </div>
+            
+            <div class="form-group">
+                <label for="appDescription"><i class="fas fa-align-left"></i> وصف التطبيق</label>
+                <textarea id="appDescription" placeholder="أدخل وصفاً مفصلاً للتطبيق..." rows="4"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-images"></i> صور التطبيق</label>
+                <div class="image-upload" onclick="document.getElementById('appImages').click()">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p>انقر لرفع صور التطبيق</p>
+                    <small>يمكنك رفع multiple صور</small>
+                    <input type="file" id="appImages" multiple accept="image/*" style="display: none;">
+                </div>
+                <div class="image-preview" id="imagePreview"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="appFile"><i class="fas fa-file"></i> ملف التطبيق</label>
+                <input type="file" id="appFile" accept=".apk,.ipa,.exe,.dmg,.zip">
+            </div>
+            
+            <button id="publishAppBtn" class="btn btn-primary btn-full">
+                <i class="fas fa-paper-plane"></i> نشر التطبيق
+            </button>
+            
+            <div class="progress-container" id="uploadProgress">
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+            
+            <div id="uploadMsg" class="alert alert-success" style="display: none;"></div>
+        </div>
+        
+        <div class="card">
+            <h3><i class="fas fa-list"></i> تطبيقاتي</h3>
+            <div id="developerAppsList">
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا توجد تطبيقات منشورة بعد</h3>
+                    <p>ابدأ بنشر أول تطبيق لك</p>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- لوحة التحكم -->
-    <div id="dashboard">
-        <!-- سيتم تحميلها ديناميكياً -->
+<!-- لوحة تحكم المستخدم -->
+<div id="userDashboard">
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <div class="nav-logo">CAPNCom - المتجر</div>
+            <div class="nav-user">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <button class="btn btn-outline btn-small" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث عن تطبيقات أو ألعاب...">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-mobile-alt"></i> التطبيقات والألعاب</h2>
+            <div id="appsGrid" class="apps-grid">
+                <!-- سيتم تحميل التطبيقات هنا -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- تفاصيل التطبيق -->
+<div id="appDetails">
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <div class="nav-logo">CAPNCom</div>
+            <button class="btn btn-outline btn-small" onclick="goBack()">
+                <i class="fas fa-arrow-right"></i> رجوع
+            </button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div id="appDetailsContent">
+            <!-- سيتم تحميل تفاصيل التطبيق هنا -->
+        </div>
     </div>
 </div>
 
@@ -578,8 +862,8 @@ import {
     getAuth, 
     signInWithPopup, 
     GoogleAuthProvider, 
-    signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
     updateProfile
@@ -600,7 +884,8 @@ import {
     doc,
     query,
     where,
-    updateDoc
+    updateDoc,
+    orderBy
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 // Firebase Config
@@ -622,126 +907,486 @@ const storage = getStorage();
 const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
-// إعدادات الرفع
-const MAX_FILE_SIZE = 50 * 1024 * 1024 * 1024; // 50 جيجابايت
-const ALLOWED_FILE_TYPES = [
-    '.apk', '.ipa', '.exe', '.dmg', '.deb', '.rpm', '.appimage',
-    '.zip', '.rar', '.7z', '.tar', '.gz'
-];
+// حالة التطبيق
+let currentUser = null;
+let userRole = null;
+let selectedAppImages = [];
+let currentAppDetails = null;
 
-// DOM Elements
-const loginDiv = document.getElementById('loginDiv');
-const registerDiv = document.getElementById('registerDiv');
-const dashboard = document.getElementById('dashboard');
-const googleLoginBtn = document.getElementById('googleLoginBtn');
-const emailLoginBtn = document.getElementById('emailLoginBtn');
-const registerBtn = document.getElementById('registerBtn');
-const showRegister = document.getElementById('showRegister');
-const showLogin = document.getElementById('showLogin');
-const loginMsg = document.getElementById('loginMsg');
-const registerMsg = document.getElementById('registerMsg');
+// عناصر DOM
+const welcomeScreen = document.getElementById('welcomeScreen');
+const developerAuth = document.getElementById('developerAuth');
+const userAuth = document.getElementById('userAuth');
+const developerDashboard = document.getElementById('developerDashboard');
+const userDashboard = document.getElementById('userDashboard');
+const appDetails = document.getElementById('appDetails');
 
-// Show register form
-showRegister.addEventListener('click', () => {
-    loginDiv.style.display = 'none';
-    registerDiv.style.display = 'block';
-});
-
-// Show login form
-showLogin.addEventListener('click', () => {
-    registerDiv.style.display = 'none';
-    loginDiv.style.display = 'block';
-});
-
-// Auth state listener
+// استمع لتغير حالة المصادقة
 onAuthStateChanged(auth, (user) => {
+    currentUser = user;
     if (user) {
-        loginDiv.style.display = 'none';
-        registerDiv.style.display = 'none';
-        dashboard.style.display = 'block';
-        showDashboard(user);
+        // تحميل بيانات المستخدم من Firestore
+        loadUserData(user.uid);
     } else {
-        loginDiv.style.display = 'block';
-        registerDiv.style.display = 'none';
-        dashboard.style.display = 'none';
+        showScreen('welcomeScreen');
     }
 });
 
-// Google Login
-googleLoginBtn.addEventListener('click', async () => {
-    try {
-        const result = await signInWithPopup(auth, provider);
-        showMessage(loginMsg, 'تم تسجيل الدخول بنجاح!', 'success');
-    } catch (error) {
-        handleAuthError(error, loginMsg);
+// اختيار الدور
+function selectRole(role) {
+    userRole = role;
+    if (role === 'developer') {
+        showScreen('developerAuth');
+    } else {
+        showScreen('userAuth');
     }
-});
+}
 
-// Email Login
-emailLoginBtn.addEventListener('click', async () => {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
+// تسجيل المطور
+document.getElementById('devRegisterBtn').addEventListener('click', async () => {
+    const name = document.getElementById('devName').value;
+    const email = document.getElementById('devEmail').value;
+    const password = document.getElementById('devPassword').value;
     
-    if (!email || !password) {
-        showMessage(loginMsg, 'يرجى إدخال البريد الإلكتروني وكلمة المرور', 'danger');
-        return;
-    }
-    
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-        showMessage(loginMsg, 'تم تسجيل الدخول بنجاح!', 'success');
-    } catch (error) {
-        handleAuthError(error, loginMsg);
-    }
-});
-
-// Register new user
-registerBtn.addEventListener('click', async () => {
-    const name = document.getElementById('registerName').value;
-    const email = document.getElementById('registerEmail').value;
-    const password = document.getElementById('registerPassword').value;
-    const confirmPassword = document.getElementById('registerConfirmPassword').value;
-    
-    if (!name || !email || !password || !confirmPassword) {
-        showMessage(registerMsg, 'يرجى ملء جميع الحقول', 'danger');
-        return;
-    }
-    
-    if (password !== confirmPassword) {
-        showMessage(registerMsg, 'كلمات المرور غير متطابقة', 'danger');
-        return;
-    }
-    
-    if (password.length < 6) {
-        showMessage(registerMsg, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'danger');
+    if (!name || !email || !password) {
+        showMessage('devAuthMsg', 'يرجى ملء جميع الحقول', 'danger');
         return;
     }
     
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCredential.user, { displayName: name });
         
-        // Update profile with display name
-        await updateProfile(userCredential.user, {
-            displayName: name
+        // حفظ بيانات المطور في Firestore
+        await addDoc(collection(db, 'developers'), {
+            uid: userCredential.user.uid,
+            name: name,
+            email: email,
+            role: 'developer',
+            createdAt: new Date()
         });
         
-        showMessage(registerMsg, 'تم إنشاء الحساب بنجاح!', 'success');
-        
-        // Auto login after registration
+        showMessage('devAuthMsg', 'تم إنشاء حساب المطور بنجاح!', 'success');
         setTimeout(() => {
-            loginDiv.style.display = 'none';
-            registerDiv.style.display = 'none';
-            dashboard.style.display = 'block';
-            showDashboard(userCredential.user);
+            showDeveloperDashboard(userCredential.user);
         }, 1500);
         
     } catch (error) {
-        handleAuthError(error, registerMsg);
+        handleAuthError(error, 'devAuthMsg');
     }
 });
 
-// Handle authentication errors
-function handleAuthError(error, messageElement) {
+// تسجيل المستخدم
+document.getElementById('userRegisterBtn').addEventListener('click', async () => {
+    const name = document.getElementById('userName').value;
+    const email = document.getElementById('userEmail').value;
+    const password = document.getElementById('userPassword').value;
+    
+    if (!name || !email || !password) {
+        showMessage('userAuthMsg', 'يرجى ملء جميع الحقول', 'danger');
+        return;
+    }
+    
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCredential.user, { displayName: name });
+        
+        // حفظ بيانات المستخدم في Firestore
+        await addDoc(collection(db, 'users'), {
+            uid: userCredential.user.uid,
+            name: name,
+            email: email,
+            role: 'user',
+            createdAt: new Date()
+        });
+        
+        showMessage('userAuthMsg', 'تم إنشاء حساب المستخدم بنجاح!', 'success');
+        setTimeout(() => {
+            showUserDashboard(userCredential.user);
+        }, 1500);
+        
+    } catch (error) {
+        handleAuthError(error, 'userAuthMsg');
+    }
+});
+
+// تحميل بيانات المستخدم
+async function loadUserData(uid) {
+    try {
+        // تحقق من دور المطور
+        const devQuery = query(collection(db, 'developers'), where('uid', '==', uid));
+        const devSnapshot = await getDocs(devQuery);
+        
+        if (!devSnapshot.empty) {
+            showDeveloperDashboard(currentUser);
+            return;
+        }
+        
+        // تحقق من دور المستخدم
+        const userQuery = query(collection(db, 'users'), where('uid', '==', uid));
+        const userSnapshot = await getDocs(userQuery);
+        
+        if (!userSnapshot.empty) {
+            showUserDashboard(currentUser);
+            return;
+        }
+        
+    } catch (error) {
+        console.error('Error loading user data:', error);
+    }
+}
+
+// عرض لوحة المطور
+function showDeveloperDashboard(user) {
+    showScreen('developerDashboard');
+    document.getElementById('devAvatar').textContent = (user.displayName || 'M').charAt(0).toUpperCase();
+    loadDeveloperApps();
+    setupAppUpload();
+}
+
+// عرض لوحة المستخدم
+function showUserDashboard(user) {
+    showScreen('userDashboard');
+    document.getElementById('userAvatar').textContent = (user.displayName || 'U').charAt(0).toUpperCase();
+    loadAllApps();
+    setupSearch();
+}
+
+// إعداد رفع التطبيق
+function setupAppUpload() {
+    const appImagesInput = document.getElementById('appImages');
+    const imagePreview = document.getElementById('imagePreview');
+    const publishBtn = document.getElementById('publishAppBtn');
+    
+    // معاينة الصور
+    appImagesInput.addEventListener('change', (e) => {
+        selectedAppImages = Array.from(e.target.files);
+        imagePreview.innerHTML = '';
+        
+        selectedAppImages.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                previewItem.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <button type="button" class="remove-image" onclick="removeImage(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                imagePreview.appendChild(previewItem);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+    
+    // نشر التطبيق
+    publishBtn.addEventListener('click', async () => {
+        const appName = document.getElementById('appName').value;
+        const appDescription = document.getElementById('appDescription').value;
+        const appFile = document.getElementById('appFile').files[0];
+        
+        if (!appName || !appDescription || !appFile) {
+            showMessage('uploadMsg', 'يرجى ملء جميع الحقول ورفع الملف', 'danger');
+            return;
+        }
+        
+        if (selectedAppImages.length === 0) {
+            showMessage('uploadMsg', 'يرجى رفع صور للتطبيق', 'danger');
+            return;
+        }
+        
+        await publishApp(appName, appDescription, appFile, selectedAppImages);
+    });
+}
+
+// نشر التطبيق
+async function publishApp(name, description, appFile, images) {
+    const uploadProgress = document.getElementById('uploadProgress');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const uploadMsg = document.getElementById('uploadMsg');
+    
+    uploadProgress.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressText.textContent = '0%';
+    
+    try {
+        // رفع الصور
+        const imageUrls = [];
+        for (let i = 0; i < images.length; i++) {
+            const imageRef = ref(storage, `apps/${currentUser.uid}/images/${Date.now()}_${images[i].name}`);
+            const uploadTask = uploadBytesResumable(imageRef, images[i]);
+            
+            await new Promise((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = ((i + snapshot.bytesTransferred / snapshot.totalBytes) / (images.length + 1)) * 100;
+                        progressBar.style.width = `${Math.round(progress)}%`;
+                        progressText.textContent = `${Math.round(progress)}%`;
+                    },
+                    reject,
+                    async () => {
+                        const url = await getDownloadURL(uploadTask.snapshot.ref);
+                        imageUrls.push(url);
+                        resolve();
+                    }
+                );
+            });
+        }
+        
+        // رفع ملف التطبيق
+        const appRef = ref(storage, `apps/${currentUser.uid}/files/${Date.now()}_${appFile.name}`);
+        const uploadTask = uploadBytesResumable(appRef, appFile);
+        
+        await new Promise((resolve, reject) => {
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = ((images.length + snapshot.bytesTransferred / snapshot.totalBytes) / (images.length + 1)) * 100;
+                    progressBar.style.width = `${Math.round(progress)}%`;
+                    progressText.textContent = `${Math.round(progress)}%`;
+                },
+                reject,
+                async () => {
+                    const appUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                    
+                    // حفظ بيانات التطبيق
+                    await addDoc(collection(db, 'apps'), {
+                        name: name,
+                        description: description,
+                        fileUrl: appUrl,
+                        fileName: appFile.name,
+                        fileSize: appFile.size,
+                        images: imageUrls,
+                        developerId: currentUser.uid,
+                        developerName: currentUser.displayName,
+                        uploadDate: new Date().toLocaleString('ar-SA'),
+                        downloads: 0,
+                        type: 'app'
+                    });
+                    
+                    resolve();
+                }
+            );
+        });
+        
+        showMessage('uploadMsg', 'تم نشر التطبيق بنجاح!', 'success');
+        uploadProgress.style.display = 'none';
+        
+        // إعادة تعيين النموذج
+        document.getElementById('appName').value = '';
+        document.getElementById('appDescription').value = '';
+        document.getElementById('appFile').value = '';
+        document.getElementById('appImages').value = '';
+        document.getElementById('imagePreview').innerHTML = '';
+        selectedAppImages = [];
+        
+        // إعادة تحميل التطبيقات
+        loadDeveloperApps();
+        
+    } catch (error) {
+        console.error('Error publishing app:', error);
+        showMessage('uploadMsg', `خطأ في النشر: ${error.message}`, 'danger');
+        uploadProgress.style.display = 'none';
+    }
+}
+
+// تحميل تطبيقات المطور
+async function loadDeveloperApps() {
+    const appsList = document.getElementById('developerAppsList');
+    
+    try {
+        const q = query(collection(db, 'apps'), where('developerId', '==', currentUser.uid));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            appsList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا توجد تطبيقات منشورة بعد</h3>
+                    <p>ابدأ بنشر أول تطبيق لك</p>
+                </div>
+            `;
+            return;
+        }
+        
+        appsList.innerHTML = '';
+        snapshot.forEach(doc => {
+            const app = doc.data();
+            const appElement = createAppElement(app, doc.id, true);
+            appsList.appendChild(appElement);
+        });
+        
+    } catch (error) {
+        console.error('Error loading developer apps:', error);
+    }
+}
+
+// تحميل جميع التطبيقات
+async function loadAllApps() {
+    const appsGrid = document.getElementById('appsGrid');
+    
+    try {
+        const q = query(collection(db, 'apps'), orderBy('uploadDate', 'desc'));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            appsGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا توجد تطبيقات متاحة حالياً</h3>
+                    <p>كن أول من ينشر تطبيق!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        appsGrid.innerHTML = '';
+        snapshot.forEach(doc => {
+            const app = doc.data();
+            const appElement = createAppElement(app, doc.id, false);
+            appsGrid.appendChild(appElement);
+        });
+        
+    } catch (error) {
+        console.error('Error loading apps:', error);
+    }
+}
+
+// إنشاء عنصر التطبيق
+function createAppElement(app, appId, isDeveloper) {
+    const appCard = document.createElement('div');
+    appCard.className = 'app-card';
+    appCard.onclick = () => showAppDetails(app, appId);
+    
+    const firstImage = app.images && app.images.length > 0 ? app.images[0] : null;
+    
+    appCard.innerHTML = `
+        <div class="app-image" style="${firstImage ? `background-image: url('${firstImage}'); background-size: cover;` : ''}">
+            ${!firstImage ? '<i class="fas fa-mobile-alt"></i>' : ''}
+        </div>
+        <div class="app-info">
+            <div class="app-name">${app.name}</div>
+            <div class="app-developer">بواسطة: ${app.developerName}</div>
+            <div class="app-description">${app.description}</div>
+            <div class="app-meta">
+                <span><i class="fas fa-download"></i> ${app.downloads || 0}</span>
+                <span><i class="far fa-calendar"></i> ${app.uploadDate}</span>
+            </div>
+        </div>
+    `;
+    
+    return appCard;
+}
+
+// عرض تفاصيل التطبيق
+function showAppDetails(app, appId) {
+    currentAppDetails = { ...app, id: appId };
+    showScreen('appDetails');
+    
+    const appDetailsContent = document.getElementById('appDetailsContent');
+    const screenshotsHtml = app.images ? app.images.map(img => `
+        <div class="screenshot" style="background-image: url('${img}'); background-size: cover;"></div>
+    `).join('') : '';
+    
+    appDetailsContent.innerHTML = `
+        <div class="app-details">
+            <div class="app-hero" style="${app.images && app.images[0] ? `background-image: url('${app.images[0]}'); background-size: cover;` : ''}">
+                <div class="app-hero-content">
+                    ${!app.images || !app.images[0] ? '<div class="app-hero-icon"><i class="fas fa-mobile-alt"></i></div>' : ''}
+                    <div class="app-hero-name">${app.name}</div>
+                    <div class="app-hero-developer">بواسطة: ${app.developerName}</div>
+                </div>
+            </div>
+            
+            <div class="app-content">
+                <h3>عن التطبيق</h3>
+                <p>${app.description}</p>
+                
+                ${app.images && app.images.length > 1 ? `
+                <h3>الصور</h3>
+                <div class="app-screenshots">
+                    ${screenshotsHtml}
+                </div>
+                ` : ''}
+                
+                <div class="download-section">
+                    <h3>تحميل التطبيق</h3>
+                    <p>حجم الملف: ${formatFileSize(app.fileSize)}</p>
+                    <button class="btn btn-success download-btn" onclick="downloadApp('${app.fileUrl}', '${app.fileName}', '${appId}')">
+                        <i class="fas fa-download"></i> تحميل الآن
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// تحميل التطبيق
+async function downloadApp(fileUrl, fileName, appId) {
+    try {
+        // زيادة عداد التحميلات
+        const appRef = doc(db, 'apps', appId);
+        const currentDownloads = currentAppDetails.downloads || 0;
+        await updateDoc(appRef, {
+            downloads: currentDownloads + 1,
+            lastDownload: new Date().toISOString()
+        });
+        
+        // بدء التحميل
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.download = fileName;
+        link.click();
+        
+    } catch (error) {
+        console.error('Error downloading app:', error);
+    }
+}
+
+// البحث
+function setupSearch() {
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const appCards = document.querySelectorAll('.app-card');
+        
+        appCards.forEach(card => {
+            const appName = card.querySelector('.app-name').textContent.toLowerCase();
+            const appDescription = card.querySelector('.app-description').textContent.toLowerCase();
+            
+            if (appName.includes(searchTerm) || appDescription.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}
+
+// الدوال المساعدة
+function showScreen(screenName) {
+    const screens = ['welcomeScreen', 'developerAuth', 'userAuth', 'developerDashboard', 'userDashboard', 'appDetails'];
+    screens.forEach(screen => {
+        document.getElementById(screen).style.display = 'none';
+    });
+    document.getElementById(screenName).style.display = 'block';
+}
+
+function showMessage(elementId, message, type) {
+    const element = document.getElementById(elementId);
+    element.textContent = message;
+    element.className = `alert alert-${type}`;
+    element.style.display = 'block';
+    
+    if (type === 'success') {
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 3000);
+    }
+}
+
+function handleAuthError(error, messageElementId) {
     let errorMessage = 'حدث خطأ أثناء العملية';
     
     switch (error.code) {
@@ -754,556 +1399,72 @@ function handleAuthError(error, messageElement) {
         case 'auth/weak-password':
             errorMessage = 'كلمة المرور ضعيفة جداً';
             break;
-        case 'auth/user-not-found':
-            errorMessage = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني';
-            break;
-        case 'auth/wrong-password':
-            errorMessage = 'كلمة المرور غير صحيحة';
-            break;
         default:
             errorMessage = error.message;
     }
     
-    showMessage(messageElement, errorMessage, 'danger');
+    showMessage(messageElementId, errorMessage, 'danger');
 }
 
-// Show message
-function showMessage(element, message, type) {
-    element.textContent = message;
-    element.className = `alert alert-${type}`;
-    element.style.display = 'block';
-    
-    // Auto hide success messages
-    if (type === 'success') {
-        setTimeout(() => {
-            element.style.display = 'none';
-        }, 3000);
-    }
-}
-
-// Show dashboard
-function showDashboard(user) {
-    dashboard.innerHTML = `
-        <div class="header">
-            <h1><i class="fas fa-tachometer-alt"></i> لوحة تحكم CapNCom</h1>
-            <p>مرحباً ${user.displayName || user.email} - إدارة تطبيقاتك ومشاركتها</p>
-        </div>
-        
-        <div class="user-info">
-            <div class="user-avatar">${(user.displayName || user.email).charAt(0).toUpperCase()}</div>
-            <div class="user-details">
-                <div class="user-name">${user.displayName || 'مستخدم'}</div>
-                <div class="user-email">${user.email}</div>
-            </div>
-            <button id="logoutBtn" class="btn btn-outline">
-                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-            </button>
-        </div>
-        
-        <div class="card">
-            <h3><i class="fas fa-upload"></i> رفع تطبيق جديد</h3>
-            
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> الحد الأقصى لحجم الملف: 50 جيجابايت
-            </div>
-            
-            <div class="form-group">
-                <label for="appName"><i class="fas fa-cube"></i> اسم التطبيق الحقيقي</label>
-                <input type="text" id="appName" placeholder="أدخل اسم التطبيق الحقيقي (مثال: WhatsApp, Instagram)">
-            </div>
-            
-            <div class="form-group">
-                <label for="appDescription"><i class="fas fa-align-left"></i> وصف التطبيق</label>
-                <textarea id="appDescription" placeholder="أدخل وصفاً للتطبيق..." rows="3"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label><i class="fas fa-laptop"></i> أنظمة التشغيل المتوافقة</label>
-                <div class="platform-options">
-                    <div class="platform-option" data-platform="android">
-                        <div class="platform-icon"><i class="fab fa-android"></i></div>
-                        <div>أندرويد</div>
-                    </div>
-                    <div class="platform-option" data-platform="ios">
-                        <div class="platform-icon"><i class="fab fa-apple"></i></div>
-                        <div>iOS</div>
-                    </div>
-                    <div class="platform-option" data-platform="windows">
-                        <div class="platform-icon"><i class="fab fa-windows"></i></div>
-                        <div>ويندوز</div>
-                    </div>
-                    <div class="platform-option" data-platform="mac">
-                        <div class="platform-icon"><i class="fab fa-apple"></i></div>
-                        <div>ماك</div>
-                    </div>
-                    <div class="platform-option" data-platform="linux">
-                        <div class="platform-icon"><i class="fab fa-linux"></i></div>
-                        <div>لينكس</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="versionInputs"></div>
-            
-            <div class="form-group">
-                <label for="appFile"><i class="fas fa-file"></i> ملف التطبيق</label>
-                <input type="file" id="appFile" accept="${ALLOWED_FILE_TYPES.join(',')}">
-                <div class="file-info" id="fileInfo">
-                    <div id="fileName"></div>
-                    <div id="fileSize"></div>
-                    <div id="fileValidation"></div>
-                </div>
-            </div>
-            
-            <button id="uploadBtn" class="btn btn-primary btn-full">
-                <i class="fas fa-cloud-upload-alt"></i> رفع التطبيق
-            </button>
-            
-            <div class="progress-container" id="uploadProgress">
-                <div class="progress-bar">
-                    <div class="progress" id="progressBar"></div>
-                </div>
-                <div class="progress-text" id="progressText">0%</div>
-                <div class="progress-details" id="progressDetails"></div>
-            </div>
-            
-            <div id="uploadMsg" class="alert alert-success" style="display: none;"></div>
-        </div>
-
-        <div class="card">
-            <h3><i class="fas fa-mobile-alt"></i> تطبيقاتي المرفوعة</h3>
-            <div id="appList">
-                <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <h3>لا توجد تطبيقات مرفوعة بعد</h3>
-                    <p>ابدأ برفع أول تطبيق لك باستخدام الأداة أعلاه</p>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Setup platform selection
-    setupPlatformSelection();
-    
-    // Setup file validation
-    setupFileValidation();
-    
-    // Setup upload functionality
-    setupUploadFunctionality(user);
-    
-    // Setup logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        signOut(auth);
-    });
-    
-    // Load user's apps
-    loadUserApps(user.uid);
-}
-
-// Setup platform selection with version inputs
-function setupPlatformSelection() {
-    const platformOptions = document.querySelectorAll('.platform-option');
-    const versionInputs = document.getElementById('versionInputs');
-    
-    platformOptions.forEach(option => {
-        option.addEventListener('click', () => {
-            option.classList.toggle('selected');
-            updateVersionInputs();
-        });
-    });
-    
-    function updateVersionInputs() {
-        const selectedPlatforms = document.querySelectorAll('.platform-option.selected');
-        versionInputs.innerHTML = '';
-        versionInputs.style.display = selectedPlatforms.length > 0 ? 'block' : 'none';
-        
-        selectedPlatforms.forEach(platform => {
-            const platformName = platform.dataset.platform;
-            const platformLabel = platform.querySelector('div:last-child').textContent;
-            
-            const versionDiv = document.createElement('div');
-            versionDiv.className = 'form-group version-input';
-            versionDiv.style.display = 'block';
-            versionDiv.innerHTML = `
-                <label for="${platformName}Version"><i class="fas fa-code-branch"></i> إصدار ${platformLabel}</label>
-                <input type="text" id="${platformName}Version" placeholder="أدخل الإصدار (مثال: ${getVersionExample(platformName)})">
-            `;
-            
-            versionInputs.appendChild(versionDiv);
-        });
-    }
-}
-
-// Setup file validation
-function setupFileValidation() {
-    const fileInput = document.getElementById('appFile');
-    const fileInfo = document.getElementById('fileInfo');
-    const fileName = document.getElementById('fileName');
-    const fileSize = document.getElementById('fileSize');
-    const fileValidation = document.getElementById('fileValidation');
-    
-    fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) {
-            fileInfo.classList.remove('show');
-            return;
-        }
-        
-        // Show file info
-        fileInfo.classList.add('show');
-        fileName.innerHTML = `<strong>الاسم:</strong> ${file.name}`;
-        fileSize.innerHTML = `<strong>الحجم:</strong> ${formatFileSize(file.size)}`;
-        
-        // Validate file
-        const validationResult = validateFile(file);
-        if (validationResult.isValid) {
-            fileValidation.innerHTML = `<span class="file-size-success">✓ الملف صالح للرفع</span>`;
-        } else {
-            fileValidation.innerHTML = `<span class="file-size-warning">✗ ${validationResult.message}</span>`;
-        }
-    });
-}
-
-// Validate file before upload
-function validateFile(file) {
-    // Check file size
-    if (file.size > MAX_FILE_SIZE) {
-        return {
-            isValid: false,
-            message: `حجم الملف كبير جداً! الحد الأقصى هو ${formatFileSize(MAX_FILE_SIZE)}`
-        };
-    }
-    
-    // Check file type
-    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-    if (!ALLOWED_FILE_TYPES.includes(fileExtension)) {
-        return {
-            isValid: false,
-            message: `نوع الملف غير مدعوم. الأنواع المسموحة: ${ALLOWED_FILE_TYPES.join(', ')}`
-        };
-    }
-    
-    return { isValid: true, message: 'الملف صالح للرفع' };
-}
-
-// Get version examples based on platform
-function getVersionExample(platform) {
-    const examples = {
-        android: 'أندرويد 7.0 أو أعلى',
-        ios: 'iOS 12.0 أو أعلى', 
-        windows: 'Windows 10 أو أعلى',
-        mac: 'macOS 10.14 أو أعلى',
-        linux: 'Ubuntu 18.04 أو أعلى'
-    };
-    return examples[platform] || 'الإصدار';
-}
-
-// Setup upload functionality
-function setupUploadFunctionality(user) {
-    const uploadBtn = document.getElementById('uploadBtn');
-    const uploadProgress = document.getElementById('uploadProgress');
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const progressDetails = document.getElementById('progressDetails');
-    const uploadMsg = document.getElementById('uploadMsg');
-    
-    uploadBtn.addEventListener('click', async () => {
-        const appName = document.getElementById('appName').value;
-        const appDescription = document.getElementById('appDescription').value;
-        const appFile = document.getElementById('appFile').files[0];
-        const selectedPlatforms = document.querySelectorAll('.platform-option.selected');
-        
-        // Validation
-        if (!appName) {
-            showMessage(uploadMsg, 'يرجى إدخال اسم التطبيق', 'danger');
-            return;
-        }
-        
-        if (!appFile) {
-            showMessage(uploadMsg, 'يرجى اختيار ملف التطبيق', 'danger');
-            return;
-        }
-        
-        if (selectedPlatforms.length === 0) {
-            showMessage(uploadMsg, 'يرجى اختيار نظام تشغيل واحد على الأقل', 'danger');
-            return;
-        }
-        
-        // Validate file
-        const validationResult = validateFile(appFile);
-        if (!validationResult.isValid) {
-            showMessage(uploadMsg, validationResult.message, 'danger');
-            return;
-        }
-        
-        // Collect platform versions
-        const platforms = {};
-        selectedPlatforms.forEach(platform => {
-            const platformName = platform.dataset.platform;
-            const versionInput = document.getElementById(`${platformName}Version`);
-            platforms[platformName] = versionInput ? versionInput.value : '';
-        });
-        
-        // Show progress
-        uploadProgress.style.display = 'block';
-        progressBar.style.width = '0%';
-        progressText.textContent = '0%';
-        progressDetails.innerHTML = 'جاري التحضير للرفع...';
-        uploadBtn.disabled = true;
-        
-        try {
-            // Create unique file name
-            const timestamp = Date.now();
-            const uniqueFileName = `${timestamp}_${appFile.name}`;
-            const storageRef = ref(storage, `apps/${user.uid}/${uniqueFileName}`);
-            
-            // Upload file to Firebase Storage
-            const uploadTask = uploadBytesResumable(storageRef, appFile);
-            
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    // Calculate progress
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    const roundedProgress = Math.round(progress);
-                    
-                    // Update progress bar
-                    progressBar.style.width = `${roundedProgress}%`;
-                    progressText.textContent = `${roundedProgress}%`;
-                    
-                    // Update progress details
-                    const transferred = formatFileSize(snapshot.bytesTransferred);
-                    const total = formatFileSize(snapshot.totalBytes);
-                    const speed = snapshot.bytesTransferred / (Date.now() - timestamp) * 1000;
-                    
-                    progressDetails.innerHTML = `
-                        ${transferred} / ${total} 
-                        | السرعة: ${formatFileSize(speed)}/ثانية
-                        | الوقت المتبقي: ${calculateTimeRemaining(progress, timestamp)}
-                    `;
-                },
-                (error) => {
-                    console.error('Upload error:', error);
-                    let errorMessage = 'حدث خطأ أثناء الرفع';
-                    
-                    if (error.code === 'storage/unauthorized') {
-                        errorMessage = 'غير مصرح بالرفع. تحقق من إعدادات Firebase Storage';
-                    } else if (error.code === 'storage/canceled') {
-                        errorMessage = 'تم إلغاء الرفع';
-                    } else if (error.code === 'storage/unknown') {
-                        errorMessage = 'خطأ غير معروف في التخزين';
-                    }
-                    
-                    showMessage(uploadMsg, `${errorMessage}: ${error.message}`, 'danger');
-                    uploadProgress.style.display = 'none';
-                    uploadBtn.disabled = false;
-                },
-                async () => {
-                    try {
-                        // Get download URL
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                        
-                        // Save app data to Firestore
-                        await addDoc(collection(db, 'apps'), {
-                            name: appName,
-                            description: appDescription,
-                            fileUrl: downloadURL,
-                            fileName: uniqueFileName,
-                            originalFileName: appFile.name,
-                            fileSize: appFile.size,
-                            platforms: platforms,
-                            userId: user.uid,
-                            developerName: user.displayName || 'مطور',
-                            uploadDate: new Date().toLocaleString('ar-SA'),
-                            downloads: 0,
-                            lastDownload: null
-                        });
-                        
-                        // Success message
-                        showMessage(uploadMsg, 'تم رفع التطبيق بنجاح!', 'success');
-                        uploadProgress.style.display = 'none';
-                        uploadBtn.disabled = false;
-                        
-                        // Reset form
-                        resetUploadForm();
-                        
-                        // Reload apps list
-                        loadUserApps(user.uid);
-                        
-                    } catch (dbError) {
-                        console.error('Database error:', dbError);
-                        showMessage(uploadMsg, `تم رفع الملف ولكن حدث خطأ في حفظ البيانات: ${dbError.message}`, 'danger');
-                        uploadBtn.disabled = false;
-                    }
-                }
-            );
-            
-        } catch (error) {
-            console.error('Upload setup error:', error);
-            showMessage(uploadMsg, `خطأ في إعداد الرفع: ${error.message}`, 'danger');
-            uploadProgress.style.display = 'none';
-            uploadBtn.disabled = false;
-        }
-    });
-}
-
-// Calculate remaining time for upload
-function calculateTimeRemaining(progress, startTime) {
-    if (progress === 0) return 'جاري الحساب...';
-    
-    const elapsedTime = Date.now() - startTime;
-    const totalTime = elapsedTime / (progress / 100);
-    const remainingTime = totalTime - elapsedTime;
-    
-    const minutes = Math.floor(remainingTime / 60000);
-    const seconds = Math.floor((remainingTime % 60000) / 1000);
-    
-    if (minutes > 0) {
-        return `${minutes} دقيقة ${seconds} ثانية`;
-    } else {
-        return `${seconds} ثانية`;
-    }
-}
-
-// Reset upload form
-function resetUploadForm() {
-    document.getElementById('appName').value = '';
-    document.getElementById('appDescription').value = '';
-    document.getElementById('appFile').value = '';
-    document.getElementById('fileInfo').classList.remove('show');
-    document.querySelectorAll('.platform-option.selected').forEach(opt => opt.classList.remove('selected'));
-    document.getElementById('versionInputs').innerHTML = '';
-    document.getElementById('versionInputs').style.display = 'none';
-}
-
-// Load user's apps
-async function loadUserApps(userId) {
-    const appList = document.getElementById('appList');
-    
-    try {
-        const q = query(collection(db, 'apps'), where('userId', '==', userId));
-        const querySnapshot = await getDocs(q);
-        
-        if (querySnapshot.empty) {
-            appList.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <h3>لا توجد تطبيقات مرفوعة بعد</h3>
-                    <p>ابدأ برفع أول تطبيق لك باستخدام الأداة أعلاه</p>
-                </div>
-            `;
-            return;
-        }
-        
-        appList.innerHTML = '';
-        
-        querySnapshot.forEach((docSnap) => {
-            const app = docSnap.data();
-            const platformsHtml = Object.entries(app.platforms || {}).map(([platform, version]) => `
-                <span class="compatibility-badge">
-                    <i class="fab fa-${platform}"></i>
-                    ${getPlatformName(platform)} ${version ? `- ${version}` : ''}
-                </span>
-            `).join('');
-            
-            const appDiv = document.createElement('div');
-            appDiv.className = 'app-item';
-            appDiv.innerHTML = `
-                <div class="app-header">
-                    <div class="app-name">${app.name}</div>
-                    <div class="app-downloads">${app.downloads || 0} <i class="fas fa-download"></i></div>
-                </div>
-                <div class="app-meta">
-                    <span><i class="far fa-calendar"></i> ${app.uploadDate}</span>
-                    <span><i class="fas fa-weight-hanging"></i> ${formatFileSize(app.fileSize)}</span>
-                    <span><i class="fas fa-user"></i> ${app.developerName}</span>
-                </div>
-                <div class="app-description">${app.description || 'لا يوجد وصف'}</div>
-                <div class="platforms">
-                    ${platformsHtml}
-                </div>
-                <div class="app-actions">
-                    <a href="${app.fileUrl}" download="${app.originalFileName || app.fileName}" class="btn btn-success btn-small" onclick="incrementDownload('${docSnap.id}')">
-                        <i class="fas fa-download"></i> تحميل
-                    </a>
-                    <button class="btn btn-danger btn-small" onclick="deleteApp('${docSnap.id}', '${app.fileName}')">
-                        <i class="fas fa-trash"></i> حذف
-                    </button>
-                </div>
-            `;
-            
-            appList.appendChild(appDiv);
-        });
-        
-    } catch (error) {
-        console.error('Error loading apps:', error);
-        appList.innerHTML = '<div class="alert alert-danger">حدث خطأ في تحميل التطبيقات</div>';
-    }
-}
-
-// Increment download counter
-async function incrementDownload(appId) {
-    try {
-        const appRef = doc(db, 'apps', appId);
-        const appDoc = await getDocs(query(collection(db, 'apps'), where('__name__', '==', appId)));
-        
-        if (!appDoc.empty) {
-            const currentDownloads = appDoc.docs[0].data().downloads || 0;
-            await updateDoc(appRef, {
-                downloads: currentDownloads + 1,
-                lastDownload: new Date().toISOString()
-            });
-        }
-    } catch (error) {
-        console.error('Error incrementing download:', error);
-    }
-}
-
-// Get platform display name
-function getPlatformName(platform) {
-    const names = {
-        android: 'أندرويد',
-        ios: 'iOS',
-        windows: 'ويندوز',
-        mac: 'ماك',
-        linux: 'لينكس'
-    };
-    return names[platform] || platform;
-}
-
-// Format file size
 function formatFileSize(bytes) {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Delete app function
-async function deleteApp(appId, fileName) {
-    if (confirm('هل أنت متأكد من حذف هذا التطبيق؟')) {
-        try {
-            // Delete from Storage
-            const fileRef = ref(storage, `apps/${auth.currentUser.uid}/${fileName}`);
-            await deleteObject(fileRef);
-            
-            // Delete from Firestore
-            await deleteDoc(doc(db, 'apps', appId));
-            
-            // Reload apps
-            loadUserApps(auth.currentUser.uid);
-            
-        } catch (error) {
-            console.error('Error deleting app:', error);
-            alert('حدث خطأ أثناء حذف التطبيق');
-        }
+function removeImage(index) {
+    selectedAppImages.splice(index, 1);
+    document.getElementById('appImages').value = '';
+    document.getElementById('imagePreview').innerHTML = '';
+    
+    // إعادة معاينة الصور المتبقية
+    selectedAppImages.forEach((file, idx) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.innerHTML = `
+                <img src="${e.target.result}" alt="Preview">
+                <button type="button" class="remove-image" onclick="removeImage(${idx})">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            document.getElementById('imagePreview').appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function goBack() {
+    if (userRole === 'developer') {
+        showScreen('developerDashboard');
+    } else {
+        showScreen('userDashboard');
     }
 }
 
-// Make functions globally available
-window.deleteApp = deleteApp;
-window.incrementDownload = incrementDownload;
-</script>
+async function logout() {
+    try {
+        await signOut(auth);
+        showScreen('welcomeScreen');
+        userRole = null;
+        currentAppDetails = null;
+        selectedAppImages = [];
+    } catch (error) {
+        console.error('Error signing out:', error);
+    }
+}
 
+// جعل الدوال متاحة عالمياً
+window.selectRole = selectRole;
+window.showDeveloperLogin = () => { /* يمكن إضافة منطق تسجيل الدخول */ };
+window.showUserLogin = () => { /* يمكن إضافة منطق تسجيل الدخول */ };
+window.removeImage = removeImage;
+window.downloadApp = downloadApp;
+window.goBack = goBack;
+window.logout = logout;
+</script>
 </body>
 </html>
