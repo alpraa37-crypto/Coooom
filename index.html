@@ -1,703 +1,1117 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CapNCom - منصة رفع الملفات المتقدمة</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root {
-  --primary: #4361ee;
-  --primary-dark: #3a0ca3;
-  --secondary: #7209b7;
-  --accent: #f72585;
-  --light: #f8f9fa;
-  --dark: #212529;
-  --success: #4cc9f0;
-  --danger: #e63946;
-  --warning: #ffbe0b;
-  --gray: #6c757d;
-  --border-radius: 12px;
-  --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  --transition: all 0.3s ease;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapNCom - منصة رفع التطبيقات المتقدمة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --danger: #e63946;
+            --warning: #ffbe0b;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border-radius: 16px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-  color: var(--dark);
-  line-height: 1.6;
-  min-height: 100vh;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding: 20px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  color: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  position: relative;
-  overflow: hidden;
-}
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: var(--gradient);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
 
-.header::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-  background-size: cover;
-}
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
 
-.header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  position: relative;
-  z-index: 1;
-}
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
 
-.header p {
-  font-size: 1.1rem;
-  opacity: 0.9;
-  position: relative;
-  z-index: 1;
-}
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
 
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 25px;
-  transition: var(--transition);
-  border: 1px solid rgba(0,0,0,0.05);
-}
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
 
-.card h2, .card h3 {
-  color: var(--primary);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+        .card h2, .card h3 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.card h2 i, .card h3 i {
-  color: var(--secondary);
-}
+        .card h2 i, .card h3 i {
+            color: var(--secondary);
+        }
 
-.form-group {
-  margin-bottom: 20px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--dark);
-}
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
 
-input, textarea, select {
-  width: 100%;
-  padding: 14px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-family: inherit;
-  font-size: 1rem;
-  transition: var(--transition);
-  background-color: #f9f9f9;
-}
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+        }
 
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-  background-color: white;
-}
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            background-color: white;
+        }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 24px;
-  border-radius: 8px;
-  border: none;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  text-align: center;
-}
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 8px;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
-}
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
-}
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #5a08a1 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
+        }
 
-.btn-secondary {
-  background: linear-gradient(135deg, var(--secondary) 0%, #5a08a1 100%);
-  color: white;
-}
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #5a08a1 100%);
+            color: white;
+        }
 
-.btn-secondary:hover {
-  background: linear-gradient(135deg, #5a08a1 0%, #4a077e 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 7px 15px rgba(114, 9, 183, 0.3);
-}
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5a08a1 0%, #4a077e 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(114, 9, 183, 0.3);
+        }
 
-.btn-danger {
-  background: linear-gradient(135deg, var(--danger) 0%, #c1121f 100%);
-  color: white;
-}
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #3a86ff 100%);
+            color: white;
+        }
 
-.btn-danger:hover {
-  background: linear-gradient(135deg, #c1121f 0%, #a4161a 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 7px 15px rgba(230, 57, 70, 0.3);
-}
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #c1121f 100%);
+            color: white;
+        }
 
-.btn-outline {
-  background: transparent;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-}
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
 
-.btn-outline:hover {
-  background: var(--primary);
-  color: white;
-}
+        .btn-full {
+            width: 100%;
+        }
 
-.btn-full {
-  width: 100%;
-}
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
 
-.file-item {
-  background: var(--light);
-  padding: 18px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: var(--transition);
-  border-left: 4px solid var(--primary);
-}
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--gray);
+        }
 
-.file-item:hover {
-  background: #e9ecef;
-  transform: translateX(5px);
-}
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: #ddd;
+        }
 
-.file-info {
-  flex: 1;
-}
+        .divider span {
+            padding: 0 15px;
+            font-size: 0.9rem;
+        }
 
-.file-name {
-  font-weight: 600;
-  color: var(--dark);
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
 
-.file-desc {
-  color: var(--gray);
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-}
+        .alert-success {
+            background-color: rgba(76, 201, 240, 0.15);
+            color: #0a9396;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
 
-.file-date {
-  color: var(--gray);
-  font-size: 0.8rem;
-}
+        .alert-danger {
+            background-color: rgba(230, 57, 70, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(230, 57, 70, 0.2);
+        }
 
-.file-actions {
-  display: flex;
-  gap: 10px;
-}
+        .alert-info {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
 
-.file-link {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: var(--transition);
-}
+        .progress-container {
+            margin-top: 15px;
+            display: none;
+        }
 
-.file-link:hover {
-  color: var(--secondary);
-}
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
 
-.progress-bar {
-  height: 8px;
-  background-color: #e9ecef;
-  border-radius: 4px;
-  margin-top: 10px;
-  overflow: hidden;
-}
+        .progress {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 5px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
 
-.progress {
-  height: 100%;
-  background: linear-gradient(90deg, var(--success) 0%, var(--primary) 100%);
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
+        .progress-text {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
 
-.divider {
-  display: flex;
-  align-items: center;
-  margin: 20px 0;
-  color: var(--gray);
-}
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
 
-.divider::before, .divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: #ddd;
-}
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
 
-.divider span {
-  padding: 0 15px;
-  font-size: 0.9rem;
-}
+        .user-details {
+            flex: 1;
+        }
 
-.alert {
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 500;
-}
+        .user-name {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
 
-.alert-success {
-  background-color: rgba(76, 201, 240, 0.2);
-  color: #0a9396;
-  border: 1px solid rgba(76, 201, 240, 0.3);
-}
+        .user-email {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
 
-.alert-danger {
-  background-color: rgba(230, 57, 70, 0.1);
-  color: var(--danger);
-  border: 1px solid rgba(230, 57, 70, 0.2);
-}
+        .app-item {
+            background: var(--light);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary);
+            transition: var(--transition);
+        }
 
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--gray);
-}
+        .app-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
 
-.empty-state i {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  color: #dee2e6;
-}
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-#loginDiv, #dashboard {
-  display: none;
-}
+        .app-name {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.3rem;
+        }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 10px;
-}
+        .app-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
 
-.user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
+        .app-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-.user-details {
-  flex: 1;
-}
+        .app-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
 
-.user-name {
-  font-weight: 600;
-  color: var(--dark);
-}
+        .compatibility-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
 
-.user-email {
-  color: var(--gray);
-  font-size: 0.9rem;
-}
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-  
-  .header h1 {
-    font-size: 2rem;
-  }
-  
-  .file-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-  
-  .file-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-}
-</style>
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #dee2e6;
+        }
+
+        .platform-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .platform-option {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .platform-option:hover {
+            border-color: var(--primary);
+        }
+
+        .platform-option.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .platform-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .version-input {
+            display: none;
+            margin-top: 15px;
+        }
+
+        #loginDiv, #registerDiv, #dashboard {
+            display: none;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .app-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- قسم تسجيل الدخول -->
-  <div id="loginDiv" class="card">
-    <div class="header">
-      <h1><i class="fas fa-cloud-upload-alt"></i> CapNCom</h1>
-      <p>منصة رفع الملفات المتقدمة - حلول تخزين سحابي آمنة</p>
-    </div>
-    
-    <div class="card">
-      <h2><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h2>
-      
-      <button id="googleLoginBtn" class="btn btn-secondary btn-full">
-        <i class="fab fa-google"></i> تسجيل دخول باستخدام جوجل
-      </button>
-      
-      <div class="divider">
-        <span>أو</span>
-      </div>
-      
-      <div class="form-group">
-        <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-        <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني">
-      </div>
-      
-      <div class="form-group">
-        <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
-        <input type="password" id="password" placeholder="أدخل كلمة المرور">
-      </div>
-      
-      <button id="emailLoginBtn" class="btn btn-primary btn-full">
-        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
-      </button>
-      
-      <div id="loginMsg" class="alert alert-danger" style="display:none;"></div>
-    </div>
-  </div>
-
-  <!-- لوحة التحكم -->
-  <div id="dashboard">
-    <div class="header">
-      <h1><i class="fas fa-tachometer-alt"></i> لوحة إدارة CapNCom</h1>
-      <p>إدارة ملفاتك بسهولة وأمان</p>
-    </div>
-    
-    <div class="user-info">
-      <div class="user-avatar" id="userAvatar">U</div>
-      <div class="user-details">
-        <div class="user-name" id="userName">مستخدم</div>
-        <div class="user-email" id="userEmail">user@example.com</div>
-      </div>
-      <button id="logoutBtn" class="btn btn-outline">
-        <i class="fas fa-sign-out-alt"></i> تسجيل خروج
-      </button>
-    </div>
-    
-    <div class="card">
-      <h3><i class="fas fa-file-upload"></i> رفع ملف جديد</h3>
-      
-      <div class="form-group">
-        <label for="fileInput"><i class="fas fa-file"></i> اختيار الملف</label>
-        <input type="file" id="fileInput">
-      </div>
-      
-      <div class="form-group">
-        <label for="fileDesc"><i class="fas fa-align-left"></i> وصف الملف (اختياري)</label>
-        <textarea id="fileDesc" placeholder="أضف وصفًا للملف..." rows="3"></textarea>
-      </div>
-      
-      <button id="uploadBtn" class="btn btn-primary btn-full">
-        <i class="fas fa-cloud-upload-alt"></i> رفع الملف
-      </button>
-      
-      <div id="uploadProgress" class="progress-bar" style="display:none;">
-        <div class="progress" style="width:0%"></div>
-      </div>
-      
-      <div id="uploadMsg" class="alert alert-success" style="display:none;"></div>
-    </div>
-
-    <div class="card">
-      <h3><i class="fas fa-files"></i> الملفات المرفوعة</h3>
-      <div id="fileList">
-        <div class="empty-state">
-          <i class="fas fa-folder-open"></i>
-          <p>لا توجد ملفات مرفوعة بعد</p>
+    <!-- قسم تسجيل الدخول -->
+    <div id="loginDiv">
+        <div class="header">
+            <h1><i class="fas fa-mobile-alt"></i> CapNCom</h1>
+            <p>منصة رفع التطبيقات المتقدمة - شارك تطبيقاتك مع العالم</p>
         </div>
-      </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h2>
+            
+            <button id="googleLoginBtn" class="btn btn-secondary btn-full">
+                <i class="fab fa-google"></i> تسجيل دخول باستخدام جوجل
+            </button>
+            
+            <div class="divider">
+                <span>أو</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="loginEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
+                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور">
+            </div>
+            
+            <button id="emailLoginBtn" class="btn btn-primary btn-full">
+                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            </button>
+            
+            <div id="loginMsg" class="alert alert-danger" style="display: none;"></div>
+
+            <div class="auth-switch">
+                <p>ليس لديك حساب؟ <a id="showRegister">إنشاء حساب جديد</a></p>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- قسم إنشاء حساب -->
+    <div id="registerDiv">
+        <div class="header">
+            <h1><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h1>
+            <p>انضم إلى منصة CapNCom وابدأ برفع تطبيقاتك</p>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-user-circle"></i> إنشاء حساب</h2>
+            
+            <div class="form-group">
+                <label for="registerName"><i class="fas fa-user"></i> اسم التطبيق/المطور</label>
+                <input type="text" id="registerName" placeholder="أدخل اسم التطبيق أو اسم المطور">
+            </div>
+            
+            <div class="form-group">
+                <label for="registerEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <input type="email" id="registerEmail" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+            
+            <div class="form-group">
+                <label for="registerPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
+                <input type="password" id="registerPassword" placeholder="أنشئ كلمة مرور قوية">
+            </div>
+            
+            <div class="form-group">
+                <label for="registerConfirmPassword"><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
+                <input type="password" id="registerConfirmPassword" placeholder="أعد إدخال كلمة المرور">
+            </div>
+            
+            <button id="registerBtn" class="btn btn-primary btn-full">
+                <i class="fas fa-user-plus"></i> إنشاء حساب
+            </button>
+            
+            <div id="registerMsg" class="alert alert-danger" style="display: none;"></div>
+
+            <div class="auth-switch">
+                <p>لديك حساب بالفعل؟ <a id="showLogin">تسجيل الدخول</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div id="dashboard">
+        <!-- سيتم تحميلها ديناميكياً -->
+    </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { 
+    getAuth, 
+    signInWithPopup, 
+    GoogleAuthProvider, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { 
+    getStorage, 
+    ref, 
+    uploadBytesResumable, 
+    getDownloadURL, 
+    deleteObject 
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
+import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    getDocs, 
+    deleteDoc, 
+    doc,
+    query,
+    where 
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 // Firebase Config
 const firebaseConfig = {
-  apiKey: "AIzaSyBCJETdj6xlMQ07_GogGU7YkrxivUCaLF8",
-  authDomain: "ggni-cec3b.firebaseapp.com",
-  projectId: "ggni-cec3b",
-  storageBucket: "ggni-cec3b.appspot.com",
-  messagingSenderId: "990604244114",
-  appId: "1:990604244114:web:9310948c26ecb3037b224b",
-  measurementId: "G-L862VHWGXV"
+    apiKey: "AIzaSyBCJETdj6xlMQ07_GogGU7YkrxivUCaLF8",
+    authDomain: "ggni-cec3b.firebaseapp.com",
+    projectId: "ggni-cec3b",
+    storageBucket: "ggni-cec3b.appspot.com",
+    messagingSenderId: "990604244114",
+    appId: "1:990604244114:web:9310948c26ecb3037b224b",
+    measurementId: "G-L862VHWGXV"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth();
-const provider = new GoogleAuthProvider();
 const storage = getStorage();
 const db = getFirestore();
+const provider = new GoogleAuthProvider();
 
 // DOM Elements
 const loginDiv = document.getElementById('loginDiv');
+const registerDiv = document.getElementById('registerDiv');
 const dashboard = document.getElementById('dashboard');
 const googleLoginBtn = document.getElementById('googleLoginBtn');
 const emailLoginBtn = document.getElementById('emailLoginBtn');
-const logoutBtn = document.getElementById('logoutBtn');
+const registerBtn = document.getElementById('registerBtn');
+const showRegister = document.getElementById('showRegister');
+const showLogin = document.getElementById('showLogin');
 const loginMsg = document.getElementById('loginMsg');
-const uploadBtn = document.getElementById('uploadBtn');
-const fileInput = document.getElementById('fileInput');
-const fileDesc = document.getElementById('fileDesc');
-const uploadMsg = document.getElementById('uploadMsg');
-const uploadProgress = document.getElementById('uploadProgress');
-const progressBar = uploadProgress.querySelector('.progress');
-const fileListDiv = document.getElementById('fileList');
-const userAvatar = document.getElementById('userAvatar');
-const userName = document.getElementById('userName');
-const userEmail = document.getElementById('userEmail');
+const registerMsg = document.getElementById('registerMsg');
 
-// Show dashboard if user logged in
-auth.onAuthStateChanged(user=>{
-  if(user){
-    loginDiv.style.display='none';
-    dashboard.style.display='block';
-    
-    // تحديث معلومات المستخدم
-    if(user.displayName) {
-      userName.textContent = user.displayName;
-      userAvatar.textContent = user.displayName.charAt(0).toUpperCase();
+// Show register form
+showRegister.addEventListener('click', () => {
+    loginDiv.style.display = 'none';
+    registerDiv.style.display = 'block';
+});
+
+// Show login form
+showLogin.addEventListener('click', () => {
+    registerDiv.style.display = 'none';
+    loginDiv.style.display = 'block';
+});
+
+// Auth state listener
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        loginDiv.style.display = 'none';
+        registerDiv.style.display = 'none';
+        dashboard.style.display = 'block';
+        showDashboard(user);
     } else {
-      userName.textContent = user.email.split('@')[0];
-      userAvatar.textContent = user.email.charAt(0).toUpperCase();
+        loginDiv.style.display = 'block';
+        registerDiv.style.display = 'none';
+        dashboard.style.display = 'none';
     }
-    userEmail.textContent = user.email;
-    
-    loadFiles();
-  }else{
-    loginDiv.style.display='block';
-    dashboard.style.display='none';
-  }
 });
 
 // Google Login
-googleLoginBtn.addEventListener('click', ()=>{
-  signInWithPopup(auth, provider)
-    .catch(err=>{ 
-      loginMsg.textContent = err.message; 
-      loginMsg.style.display = 'block';
-    });
+googleLoginBtn.addEventListener('click', async () => {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        showMessage(loginMsg, 'تم تسجيل الدخول بنجاح!', 'success');
+    } catch (error) {
+        handleAuthError(error, loginMsg);
+    }
 });
 
 // Email Login
-emailLoginBtn.addEventListener('click', ()=>{
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  
-  if(!email || !password) {
-    loginMsg.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور';
-    loginMsg.style.display = 'block';
-    return;
-  }
-  
-  signInWithEmailAndPassword(auth,email,password)
-    .catch(err=>{ 
-      loginMsg.textContent = err.message; 
-      loginMsg.style.display = 'block';
-    });
-});
-
-// Logout
-logoutBtn.addEventListener('click', ()=>{ 
-  signOut(auth); 
-});
-
-// Upload file
-uploadBtn.addEventListener('click', async ()=>{
-  if(fileInput.files.length===0){ 
-    uploadMsg.textContent = 'يرجى اختيار ملف أولاً';
-    uploadMsg.className = 'alert alert-danger';
-    uploadMsg.style.display = 'block';
-    return;
-  }
-  
-  const file = fileInput.files[0];
-  const desc = fileDesc.value;
-
-  // إظهار شريط التقدم
-  uploadProgress.style.display = 'block';
-  progressBar.style.width = '0%';
-  
-  const storageRef = ref(storage,'files/'+Date.now()+'-'+file.name);
-  const uploadTask = uploadBytesResumable(storageRef,file);
-
-  uploadTask.on('state_changed', 
-    (snapshot)=>{
-      const progress = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-      progressBar.style.width = `${Math.round(progress)}%`;
-    }, 
-    (error)=>{ 
-      uploadMsg.className = 'alert alert-danger';
-      uploadMsg.textContent = error.message; 
-      uploadMsg.style.display = 'block';
-      uploadProgress.style.display = 'none';
-    },
-    async ()=>{
-      const url = await getDownloadURL(uploadTask.snapshot.ref);
-      await addDoc(collection(db,'files'),{
-        name:file.name,
-        url:url,
-        description:desc,
-        date:new Date().toLocaleString('ar-SA'),
-        size: formatFileSize(file.size)
-      });
-      
-      uploadMsg.className = 'alert alert-success';
-      uploadMsg.textContent = 'تم رفع الملف بنجاح!';
-      uploadMsg.style.display = 'block';
-      uploadProgress.style.display = 'none';
-      
-      fileInput.value='';
-      fileDesc.value='';
-      loadFiles();
-      
-      // إخفاء الرسالة بعد 3 ثوانٍ
-      setTimeout(() => {
-        uploadMsg.style.display = 'none';
-      }, 3000);
+emailLoginBtn.addEventListener('click', async () => {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    if (!email || !password) {
+        showMessage(loginMsg, 'يرجى إدخال البريد الإلكتروني وكلمة المرور', 'danger');
+        return;
     }
-  );
+    
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showMessage(loginMsg, 'تم تسجيل الدخول بنجاح!', 'success');
+    } catch (error) {
+        handleAuthError(error, loginMsg);
+    }
 });
 
-// Load files
-async function loadFiles(){
-  fileListDiv.innerHTML = '';
-  const querySnapshot = await getDocs(collection(db,'files'));
-  
-  if(querySnapshot.empty) {
-    fileListDiv.innerHTML = `
-      <div class="empty-state">
-        <i class="fas fa-folder-open"></i>
-        <p>لا توجد ملفات مرفوعة بعد</p>
-      </div>
-    `;
-    return;
-  }
-  
-  querySnapshot.forEach(docSnap=>{
-    const data = docSnap.data();
-    const div = document.createElement('div');
-    div.className='file-item';
-    div.innerHTML = `
-      <div class="file-info">
-        <div class="file-name">
-          <i class="fas fa-file"></i> ${data.name}
-        </div>
-        <div class="file-desc">${data.description || 'لا يوجد وصف'}</div>
-        <div class="file-date">
-          <i class="far fa-calendar-alt"></i> ${data.date} 
-          ${data.size ? ` | <i class="fas fa-weight-hanging"></i> ${data.size}` : ''}
-        </div>
-      </div>
-      <div class="file-actions">
-        <a href="${data.url}" target="_blank" class="file-link">
-          <i class="fas fa-download"></i> تحميل
-        </a>
-        <button class="btn btn-danger" onclick="deleteFile('${docSnap.id}','${data.name}')">
-          <i class="fas fa-trash"></i> حذف
-        </button>
-      </div>
-    `;
-    fileListDiv.appendChild(div);
-  });
+// Register new user
+registerBtn.addEventListener('click', async () => {
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('registerConfirmPassword').value;
+    
+    if (!name || !email || !password || !confirmPassword) {
+        showMessage(registerMsg, 'يرجى ملء جميع الحقول', 'danger');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        showMessage(registerMsg, 'كلمات المرور غير متطابقة', 'danger');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showMessage(registerMsg, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'danger');
+        return;
+    }
+    
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // Update profile with display name
+        await updateProfile(userCredential.user, {
+            displayName: name
+        });
+        
+        showMessage(registerMsg, 'تم إنشاء الحساب بنجاح!', 'success');
+        
+        // Auto login after registration
+        setTimeout(() => {
+            loginDiv.style.display = 'none';
+            registerDiv.style.display = 'none';
+            dashboard.style.display = 'block';
+            showDashboard(userCredential.user);
+        }, 1500);
+        
+    } catch (error) {
+        handleAuthError(error, registerMsg);
+    }
+});
+
+// Handle authentication errors
+function handleAuthError(error, messageElement) {
+    let errorMessage = 'حدث خطأ أثناء العملية';
+    
+    switch (error.code) {
+        case 'auth/email-already-in-use':
+            errorMessage = 'هذا البريد الإلكتروني مستخدم بالفعل';
+            break;
+        case 'auth/invalid-email':
+            errorMessage = 'البريد الإلكتروني غير صحيح';
+            break;
+        case 'auth/weak-password':
+            errorMessage = 'كلمة المرور ضعيفة جداً';
+            break;
+        case 'auth/user-not-found':
+            errorMessage = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني';
+            break;
+        case 'auth/wrong-password':
+            errorMessage = 'كلمة المرور غير صحيحة';
+            break;
+        default:
+            errorMessage = error.message;
+    }
+    
+    showMessage(messageElement, errorMessage, 'danger');
 }
 
-// Delete file
-async function deleteFile(id,name){
-  if(confirm('هل أنت متأكد من حذف هذا الملف؟')){
-    const fileRef = ref(storage,'files/'+name);
-    await deleteObject(fileRef).catch(err=>console.log(err));
-    await deleteDoc(doc(db,'files',id));
-    loadFiles();
-  }
+// Show message
+function showMessage(element, message, type) {
+    element.textContent = message;
+    element.className = `alert alert-${type}`;
+    element.style.display = 'block';
+    
+    // Auto hide success messages
+    if (type === 'success') {
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 3000);
+    }
 }
 
-// تنسيق حجم الملف
+// Show dashboard
+function showDashboard(user) {
+    dashboard.innerHTML = `
+        <div class="header">
+            <h1><i class="fas fa-tachometer-alt"></i> لوحة تحكم CapNCom</h1>
+            <p>مرحباً ${user.displayName || user.email} - إدارة تطبيقاتك ومشاركتها</p>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar">${(user.displayName || user.email).charAt(0).toUpperCase()}</div>
+            <div class="user-details">
+                <div class="user-name">${user.displayName || 'مستخدم'}</div>
+                <div class="user-email">${user.email}</div>
+            </div>
+            <button id="logoutBtn" class="btn btn-outline">
+                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
+        </div>
+        
+        <div class="card">
+            <h3><i class="fas fa-upload"></i> رفع تطبيق جديد</h3>
+            
+            <div class="form-group">
+                <label for="appName"><i class="fas fa-cube"></i> اسم التطبيق الحقيقي</label>
+                <input type="text" id="appName" placeholder="أدخل اسم التطبيق الحقيقي (مثال: WhatsApp, Instagram)">
+            </div>
+            
+            <div class="form-group">
+                <label for="appDescription"><i class="fas fa-align-left"></i> وصف التطبيق</label>
+                <textarea id="appDescription" placeholder="أدخل وصفاً للتطبيق..." rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-laptop"></i> أنظمة التشغيل المتوافقة</label>
+                <div class="platform-options">
+                    <div class="platform-option" data-platform="android">
+                        <div class="platform-icon"><i class="fab fa-android"></i></div>
+                        <div>أندرويد</div>
+                    </div>
+                    <div class="platform-option" data-platform="ios">
+                        <div class="platform-icon"><i class="fab fa-apple"></i></div>
+                        <div>iOS</div>
+                    </div>
+                    <div class="platform-option" data-platform="windows">
+                        <div class="platform-icon"><i class="fab fa-windows"></i></div>
+                        <div>ويندوز</div>
+                    </div>
+                    <div class="platform-option" data-platform="mac">
+                        <div class="platform-icon"><i class="fab fa-apple"></i></div>
+                        <div>ماك</div>
+                    </div>
+                    <div class="platform-option" data-platform="linux">
+                        <div class="platform-icon"><i class="fab fa-linux"></i></div>
+                        <div>لينكس</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="versionInputs"></div>
+            
+            <div class="form-group">
+                <label for="appFile"><i class="fas fa-file"></i> ملف التطبيق (APK, IPA, EXE, etc.)</label>
+                <input type="file" id="appFile" accept=".apk,.ipa,.exe,.dmg,.deb,.rpm,.appimage">
+            </div>
+            
+            <button id="uploadBtn" class="btn btn-primary btn-full">
+                <i class="fas fa-cloud-upload-alt"></i> رفع التطبيق
+            </button>
+            
+            <div class="progress-container" id="uploadProgress">
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+            
+            <div id="uploadMsg" class="alert alert-success" style="display: none;"></div>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-mobile-alt"></i> تطبيقاتي المرفوعة</h3>
+            <div id="appList">
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا توجد تطبيقات مرفوعة بعد</h3>
+                    <p>ابدأ برفع أول تطبيق لك باستخدام الأداة أعلاه</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Setup platform selection
+    setupPlatformSelection();
+    
+    // Setup upload functionality
+    setupUploadFunctionality(user);
+    
+    // Setup logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        signOut(auth);
+    });
+    
+    // Load user's apps
+    loadUserApps(user.uid);
+}
+
+// Setup platform selection with version inputs
+function setupPlatformSelection() {
+    const platformOptions = document.querySelectorAll('.platform-option');
+    const versionInputs = document.getElementById('versionInputs');
+    
+    platformOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            option.classList.toggle('selected');
+            updateVersionInputs();
+        });
+    });
+    
+    function updateVersionInputs() {
+        const selectedPlatforms = document.querySelectorAll('.platform-option.selected');
+        versionInputs.innerHTML = '';
+        versionInputs.style.display = selectedPlatforms.length > 0 ? 'block' : 'none';
+        
+        selectedPlatforms.forEach(platform => {
+            const platformName = platform.dataset.platform;
+            const platformLabel = platform.querySelector('div:last-child').textContent;
+            
+            const versionDiv = document.createElement('div');
+            versionDiv.className = 'form-group version-input';
+            versionDiv.style.display = 'block';
+            versionDiv.innerHTML = `
+                <label for="${platformName}Version"><i class="fas fa-code-branch"></i> إصدار ${platformLabel}</label>
+                <input type="text" id="${platformName}Version" placeholder="أدخل الإصدار (مثال: ${getVersionExample(platformName)})">
+            `;
+            
+            versionInputs.appendChild(versionDiv);
+        });
+    }
+}
+
+// Get version examples based on platform
+function getVersionExample(platform) {
+    const examples = {
+        android: 'أندرويد 7.0 أو أعلى',
+        ios: 'iOS 12.0 أو أعلى', 
+        windows: 'Windows 10 أو أعلى',
+        mac: 'macOS 10.14 أو أعلى',
+        linux: 'Ubuntu 18.04 أو أعلى'
+    };
+    return examples[platform] || 'الإصدار';
+}
+
+// Setup upload functionality
+function setupUploadFunctionality(user) {
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadProgress = document.getElementById('uploadProgress');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const uploadMsg = document.getElementById('uploadMsg');
+    
+    uploadBtn.addEventListener('click', async () => {
+        const appName = document.getElementById('appName').value;
+        const appDescription = document.getElementById('appDescription').value;
+        const appFile = document.getElementById('appFile').files[0];
+        const selectedPlatforms = document.querySelectorAll('.platform-option.selected');
+        
+        // Validation
+        if (!appName) {
+            showMessage(uploadMsg, 'يرجى إدخال اسم التطبيق', 'danger');
+            return;
+        }
+        
+        if (!appFile) {
+            showMessage(uploadMsg, 'يرجى اختيار ملف التطبيق', 'danger');
+            return;
+        }
+        
+        if (selectedPlatforms.length === 0) {
+            showMessage(uploadMsg, 'يرجى اختيار نظام تشغيل واحد على الأقل', 'danger');
+            return;
+        }
+        
+        // Collect platform versions
+        const platforms = {};
+        selectedPlatforms.forEach(platform => {
+            const platformName = platform.dataset.platform;
+            const versionInput = document.getElementById(`${platformName}Version`);
+            platforms[platformName] = versionInput ? versionInput.value : '';
+        });
+        
+        // Show progress
+        uploadProgress.style.display = 'block';
+        progressBar.style.width = '0%';
+        progressText.textContent = '0%';
+        
+        try {
+            // Upload file to Firebase Storage
+            const storageRef = ref(storage, `apps/${user.uid}/${Date.now()}_${appFile.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, appFile);
+            
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    progressBar.style.width = `${Math.round(progress)}%`;
+                    progressText.textContent = `${Math.round(progress)}%`;
+                },
+                (error) => {
+                    showMessage(uploadMsg, `خطأ في الرفع: ${error.message}`, 'danger');
+                    uploadProgress.style.display = 'none';
+                },
+                async () => {
+                    // Get download URL
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    
+                    // Save app data to Firestore
+                    await addDoc(collection(db, 'apps'), {
+                        name: appName,
+                        description: appDescription,
+                        fileUrl: downloadURL,
+                        fileName: appFile.name,
+                        fileSize: appFile.size,
+                        platforms: platforms,
+                        userId: user.uid,
+                        developerName: user.displayName || 'مطور',
+                        uploadDate: new Date().toLocaleString('ar-SA'),
+                        downloads: 0
+                    });
+                    
+                    // Success message
+                    showMessage(uploadMsg, 'تم رفع التطبيق بنجاح!', 'success');
+                    uploadProgress.style.display = 'none';
+                    
+                    // Reset form
+                    document.getElementById('appName').value = '';
+                    document.getElementById('appDescription').value = '';
+                    document.getElementById('appFile').value = '';
+                    document.querySelectorAll('.platform-option.selected').forEach(opt => opt.classList.remove('selected'));
+                    document.getElementById('versionInputs').innerHTML = '';
+                    document.getElementById('versionInputs').style.display = 'none';
+                    
+                    // Reload apps list
+                    loadUserApps(user.uid);
+                }
+            );
+            
+        } catch (error) {
+            showMessage(uploadMsg, `خطأ: ${error.message}`, 'danger');
+            uploadProgress.style.display = 'none';
+        }
+    });
+}
+
+// Load user's apps
+async function loadUserApps(userId) {
+    const appList = document.getElementById('appList');
+    
+    try {
+        const q = query(collection(db, 'apps'), where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            appList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3>لا توجد تطبيقات مرفوعة بعد</h3>
+                    <p>ابدأ برفع أول تطبيق لك باستخدام الأداة أعلاه</p>
+                </div>
+            `;
+            return;
+        }
+        
+        appList.innerHTML = '';
+        
+        querySnapshot.forEach((docSnap) => {
+            const app = docSnap.data();
+            const platformsHtml = Object.entries(app.platforms || {}).map(([platform, version]) => `
+                <span class="compatibility-badge">
+                    <i class="fab fa-${platform}"></i>
+                    ${getPlatformName(platform)} ${version ? `- ${version}` : ''}
+                </span>
+            `).join('');
+            
+            const appDiv = document.createElement('div');
+            appDiv.className = 'app-item';
+            appDiv.innerHTML = `
+                <div class="app-header">
+                    <div class="app-name">${app.name}</div>
+                    <div class="app-downloads">${app.downloads || 0} <i class="fas fa-download"></i></div>
+                </div>
+                <div class="app-meta">
+                    <span><i class="far fa-calendar"></i> ${app.uploadDate}</span>
+                    <span><i class="fas fa-weight-hanging"></i> ${formatFileSize(app.fileSize)}</span>
+                    <span><i class="fas fa-user"></i> ${app.developerName}</span>
+                </div>
+                <div class="app-description">${app.description || 'لا يوجد وصف'}</div>
+                <div class="platforms">
+                    ${platformsHtml}
+                </div>
+                <div class="app-actions">
+                    <a href="${app.fileUrl}" download class="btn btn-success btn-small">
+                        <i class="fas fa-download"></i> تحميل
+                    </a>
+                    <button class="btn btn-danger btn-small" onclick="deleteApp('${docSnap.id}', '${app.fileName}')">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                </div>
+            `;
+            
+            appList.appendChild(appDiv);
+        });
+        
+    } catch (error) {
+        console.error('Error loading apps:', error);
+        appList.innerHTML = '<div class="alert alert-danger">حدث خطأ في تحميل التطبيقات</div>';
+    }
+}
+
+// Get platform display name
+function getPlatformName(platform) {
+    const names = {
+        android: 'أندرويد',
+        ios: 'iOS',
+        windows: 'ويندوز',
+        mac: 'ماك',
+        linux: 'لينكس'
+    };
+    return names[platform] || platform;
+}
+
+// Format file size
 function formatFileSize(bytes) {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
+
+// Delete app function
+async function deleteApp(appId, fileName) {
+    if (confirm('هل أنت متأكد من حذف هذا التطبيق؟')) {
+        try {
+            // Delete from Storage
+            const fileRef = ref(storage, `apps/${auth.currentUser.uid}/${fileName}`);
+            await deleteObject(fileRef);
+            
+            // Delete from Firestore
+            await deleteDoc(doc(db, 'apps', appId));
+            
+            // Reload apps
+            loadUserApps(auth.currentUser.uid);
+            
+        } catch (error) {
+            console.error('Error deleting app:', error);
+            alert('حدث خطأ أثناء حذف التطبيق');
+        }
+    }
+}
+
+// Make deleteApp function globally available
+window.deleteApp = deleteApp;
 </script>
 
 </body>
