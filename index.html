@@ -416,6 +416,28 @@
             margin-top: 15px;
         }
 
+        .file-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-size-warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .file-size-success {
+            color: var(--success);
+            font-weight: 600;
+        }
+
         #loginDiv, #registerDiv, #dashboard {
             display: none;
         }
@@ -577,7 +599,8 @@ import {
     deleteDoc, 
     doc,
     query,
-    where 
+    where,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 // Firebase Config
@@ -598,6 +621,13 @@ const auth = getAuth();
 const storage = getStorage();
 const db = getFirestore();
 const provider = new GoogleAuthProvider();
+
+// إعدادات الرفع
+const MAX_FILE_SIZE = 50 * 1024 * 1024 * 1024; // 50 جيجابايت
+const ALLOWED_FILE_TYPES = [
+    '.apk', '.ipa', '.exe', '.dmg', '.deb', '.rpm', '.appimage',
+    '.zip', '.rar', '.7z', '.tar', '.gz'
+];
 
 // DOM Elements
 const loginDiv = document.getElementById('loginDiv');
@@ -773,6 +803,10 @@ function showDashboard(user) {
         <div class="card">
             <h3><i class="fas fa-upload"></i> رفع تطبيق جديد</h3>
             
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> الحد الأقصى لحجم الملف: 50 جيجابايت
+            </div>
+            
             <div class="form-group">
                 <label for="appName"><i class="fas fa-cube"></i> اسم التطبيق الحقيقي</label>
                 <input type="text" id="appName" placeholder="أدخل اسم التطبيق الحقيقي (مثال: WhatsApp, Instagram)">
@@ -812,8 +846,13 @@ function showDashboard(user) {
             <div id="versionInputs"></div>
             
             <div class="form-group">
-                <label for="appFile"><i class="fas fa-file"></i> ملف التطبيق (APK, IPA, EXE, etc.)</label>
-                <input type="file" id="appFile" accept=".apk,.ipa,.exe,.dmg,.deb,.rpm,.appimage">
+                <label for="appFile"><i class="fas fa-file"></i> ملف التطبيق</label>
+                <input type="file" id="appFile" accept="${ALLOWED_FILE_TYPES.join(',')}">
+                <div class="file-info" id="fileInfo">
+                    <div id="fileName"></div>
+                    <div id="fileSize"></div>
+                    <div id="fileValidation"></div>
+                </div>
             </div>
             
             <button id="uploadBtn" class="btn btn-primary btn-full">
@@ -825,6 +864,7 @@ function showDashboard(user) {
                     <div class="progress" id="progressBar"></div>
                 </div>
                 <div class="progress-text" id="progressText">0%</div>
+                <div class="progress-details" id="progressDetails"></div>
             </div>
             
             <div id="uploadMsg" class="alert alert-success" style="display: none;"></div>
@@ -844,6 +884,9 @@ function showDashboard(user) {
     
     // Setup platform selection
     setupPlatformSelection();
+    
+    // Setup file validation
+    setupFileValidation();
     
     // Setup upload functionality
     setupUploadFunctionality(user);
@@ -891,6 +934,58 @@ function setupPlatformSelection() {
     }
 }
 
+// Setup file validation
+function setupFileValidation() {
+    const fileInput = document.getElementById('appFile');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const fileValidation = document.getElementById('fileValidation');
+    
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) {
+            fileInfo.classList.remove('show');
+            return;
+        }
+        
+        // Show file info
+        fileInfo.classList.add('show');
+        fileName.innerHTML = `<strong>الاسم:</strong> ${file.name}`;
+        fileSize.innerHTML = `<strong>الحجم:</strong> ${formatFileSize(file.size)}`;
+        
+        // Validate file
+        const validationResult = validateFile(file);
+        if (validationResult.isValid) {
+            fileValidation.innerHTML = `<span class="file-size-success">✓ الملف صالح للرفع</span>`;
+        } else {
+            fileValidation.innerHTML = `<span class="file-size-warning">✗ ${validationResult.message}</span>`;
+        }
+    });
+}
+
+// Validate file before upload
+function validateFile(file) {
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+        return {
+            isValid: false,
+            message: `حجم الملف كبير جداً! الحد الأقصى هو ${formatFileSize(MAX_FILE_SIZE)}`
+        };
+    }
+    
+    // Check file type
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    if (!ALLOWED_FILE_TYPES.includes(fileExtension)) {
+        return {
+            isValid: false,
+            message: `نوع الملف غير مدعوم. الأنواع المسموحة: ${ALLOWED_FILE_TYPES.join(', ')}`
+        };
+    }
+    
+    return { isValid: true, message: 'الملف صالح للرفع' };
+}
+
 // Get version examples based on platform
 function getVersionExample(platform) {
     const examples = {
@@ -909,6 +1004,7 @@ function setupUploadFunctionality(user) {
     const uploadProgress = document.getElementById('uploadProgress');
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
+    const progressDetails = document.getElementById('progressDetails');
     const uploadMsg = document.getElementById('uploadMsg');
     
     uploadBtn.addEventListener('click', async () => {
@@ -933,6 +1029,13 @@ function setupUploadFunctionality(user) {
             return;
         }
         
+        // Validate file
+        const validationResult = validateFile(appFile);
+        if (!validationResult.isValid) {
+            showMessage(uploadMsg, validationResult.message, 'danger');
+            return;
+        }
+        
         // Collect platform versions
         const platforms = {};
         selectedPlatforms.forEach(platform => {
@@ -945,174 +1048,22 @@ function setupUploadFunctionality(user) {
         uploadProgress.style.display = 'block';
         progressBar.style.width = '0%';
         progressText.textContent = '0%';
+        progressDetails.innerHTML = 'جاري التحضير للرفع...';
+        uploadBtn.disabled = true;
         
         try {
+            // Create unique file name
+            const timestamp = Date.now();
+            const uniqueFileName = `${timestamp}_${appFile.name}`;
+            const storageRef = ref(storage, `apps/${user.uid}/${uniqueFileName}`);
+            
             // Upload file to Firebase Storage
-            const storageRef = ref(storage, `apps/${user.uid}/${Date.now()}_${appFile.name}`);
             const uploadTask = uploadBytesResumable(storageRef, appFile);
             
             uploadTask.on('state_changed', 
                 (snapshot) => {
+                    // Calculate progress
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    progressBar.style.width = `${Math.round(progress)}%`;
-                    progressText.textContent = `${Math.round(progress)}%`;
-                },
-                (error) => {
-                    showMessage(uploadMsg, `خطأ في الرفع: ${error.message}`, 'danger');
-                    uploadProgress.style.display = 'none';
-                },
-                async () => {
-                    // Get download URL
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    const roundedProgress = Math.round(progress);
                     
-                    // Save app data to Firestore
-                    await addDoc(collection(db, 'apps'), {
-                        name: appName,
-                        description: appDescription,
-                        fileUrl: downloadURL,
-                        fileName: appFile.name,
-                        fileSize: appFile.size,
-                        platforms: platforms,
-                        userId: user.uid,
-                        developerName: user.displayName || 'مطور',
-                        uploadDate: new Date().toLocaleString('ar-SA'),
-                        downloads: 0
-                    });
-                    
-                    // Success message
-                    showMessage(uploadMsg, 'تم رفع التطبيق بنجاح!', 'success');
-                    uploadProgress.style.display = 'none';
-                    
-                    // Reset form
-                    document.getElementById('appName').value = '';
-                    document.getElementById('appDescription').value = '';
-                    document.getElementById('appFile').value = '';
-                    document.querySelectorAll('.platform-option.selected').forEach(opt => opt.classList.remove('selected'));
-                    document.getElementById('versionInputs').innerHTML = '';
-                    document.getElementById('versionInputs').style.display = 'none';
-                    
-                    // Reload apps list
-                    loadUserApps(user.uid);
-                }
-            );
-            
-        } catch (error) {
-            showMessage(uploadMsg, `خطأ: ${error.message}`, 'danger');
-            uploadProgress.style.display = 'none';
-        }
-    });
-}
-
-// Load user's apps
-async function loadUserApps(userId) {
-    const appList = document.getElementById('appList');
-    
-    try {
-        const q = query(collection(db, 'apps'), where('userId', '==', userId));
-        const querySnapshot = await getDocs(q);
-        
-        if (querySnapshot.empty) {
-            appList.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <h3>لا توجد تطبيقات مرفوعة بعد</h3>
-                    <p>ابدأ برفع أول تطبيق لك باستخدام الأداة أعلاه</p>
-                </div>
-            `;
-            return;
-        }
-        
-        appList.innerHTML = '';
-        
-        querySnapshot.forEach((docSnap) => {
-            const app = docSnap.data();
-            const platformsHtml = Object.entries(app.platforms || {}).map(([platform, version]) => `
-                <span class="compatibility-badge">
-                    <i class="fab fa-${platform}"></i>
-                    ${getPlatformName(platform)} ${version ? `- ${version}` : ''}
-                </span>
-            `).join('');
-            
-            const appDiv = document.createElement('div');
-            appDiv.className = 'app-item';
-            appDiv.innerHTML = `
-                <div class="app-header">
-                    <div class="app-name">${app.name}</div>
-                    <div class="app-downloads">${app.downloads || 0} <i class="fas fa-download"></i></div>
-                </div>
-                <div class="app-meta">
-                    <span><i class="far fa-calendar"></i> ${app.uploadDate}</span>
-                    <span><i class="fas fa-weight-hanging"></i> ${formatFileSize(app.fileSize)}</span>
-                    <span><i class="fas fa-user"></i> ${app.developerName}</span>
-                </div>
-                <div class="app-description">${app.description || 'لا يوجد وصف'}</div>
-                <div class="platforms">
-                    ${platformsHtml}
-                </div>
-                <div class="app-actions">
-                    <a href="${app.fileUrl}" download class="btn btn-success btn-small">
-                        <i class="fas fa-download"></i> تحميل
-                    </a>
-                    <button class="btn btn-danger btn-small" onclick="deleteApp('${docSnap.id}', '${app.fileName}')">
-                        <i class="fas fa-trash"></i> حذف
-                    </button>
-                </div>
-            `;
-            
-            appList.appendChild(appDiv);
-        });
-        
-    } catch (error) {
-        console.error('Error loading apps:', error);
-        appList.innerHTML = '<div class="alert alert-danger">حدث خطأ في تحميل التطبيقات</div>';
-    }
-}
-
-// Get platform display name
-function getPlatformName(platform) {
-    const names = {
-        android: 'أندرويد',
-        ios: 'iOS',
-        windows: 'ويندوز',
-        mac: 'ماك',
-        linux: 'لينكس'
-    };
-    return names[platform] || platform;
-}
-
-// Format file size
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// Delete app function
-async function deleteApp(appId, fileName) {
-    if (confirm('هل أنت متأكد من حذف هذا التطبيق؟')) {
-        try {
-            // Delete from Storage
-            const fileRef = ref(storage, `apps/${auth.currentUser.uid}/${fileName}`);
-            await deleteObject(fileRef);
-            
-            // Delete from Firestore
-            await deleteDoc(doc(db, 'apps', appId));
-            
-            // Reload apps
-            loadUserApps(auth.currentUser.uid);
-            
-        } catch (error) {
-            console.error('Error deleting app:', error);
-            alert('حدث خطأ أثناء حذف التطبيق');
-        }
-    }
-}
-
-// Make deleteApp function globally available
-window.deleteApp = deleteApp;
-</script>
-
-</body>
-</html>
+                    // Update progress bar
