@@ -602,6 +602,77 @@
             color: #dee2e6;
         }
 
+        /* أنظمة التشغيل */
+        .platforms-section {
+            margin-bottom: 20px;
+        }
+
+        .platform-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .platform-option {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .platform-option:hover {
+            border-color: var(--primary);
+        }
+
+        .platform-option.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .platform-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .platform-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .version-inputs {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .version-input {
+            margin-bottom: 10px;
+        }
+
+        .version-input label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .compatibility-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+
         #welcomeScreen, #developerAuth, #userAuth, #developerDashboard, #userDashboard, #appDetails {
             display: none;
         }
@@ -625,6 +696,10 @@
             
             .app-hero-name {
                 font-size: 2rem;
+            }
+            
+            .platform-options {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             }
         }
     </style>
@@ -706,11 +781,46 @@
             </button>
             
             <div class="auth-switch">
-                <p>لديك حساب مطور؟ <a onclick="showDeveloperLogin()">تسجيل الدخول</a></p>
+                <p><a onclick="showDeveloperLogin()">تسجيل الدخول كمطور</a></p>
                 <p><a onclick="goBackToWelcome()">العودة للخلف</a></p>
             </div>
             
             <div id="devAuthMsg" class="alert alert-danger" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- تسجيل الدخول للمطور -->
+<div id="developerLogin" style="display: none;">
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h1>
+            <p>ادخل إلى حسابك كمطور</p>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-user-tie"></i> تسجيل الدخول كمطور</h2>
+            
+            <div class="form-group">
+                <label for="devLoginEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <input type="email" id="devLoginEmail" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+            
+            <div class="form-group">
+                <label for="devLoginPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
+                <input type="password" id="devLoginPassword" placeholder="أدخل كلمة المرور">
+            </div>
+            
+            <button id="devLoginBtn" class="btn btn-primary btn-full">
+                <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            </button>
+            
+            <div class="auth-switch">
+                <p>ليس لديك حساب؟ <a onclick="showDeveloperRegister()">إنشاء حساب جديد</a></p>
+                <p><a onclick="goBackToWelcome()">العودة للخلف</a></p>
+            </div>
+            
+            <div id="devLoginMsg" class="alert alert-danger" style="display: none;"></div>
         </div>
     </div>
 </div>
@@ -777,6 +887,38 @@
                 <label for="appDescription"><i class="fas fa-align-left"></i> وصف التطبيق</label>
                 <textarea id="appDescription" placeholder="أدخل وصفاً مفصلاً للتطبيق..." rows="4"></textarea>
             </div>
+
+            <!-- أنظمة التشغيل المتوافقة -->
+            <div class="form-group platforms-section">
+                <label><i class="fas fa-laptop"></i> أنظمة التشغيل المتوافقة</label>
+                <div class="platform-options">
+                    <div class="platform-option" data-platform="android" onclick="togglePlatform(this)">
+                        <div class="platform-icon"><i class="fab fa-android"></i></div>
+                        <div class="platform-name">أندرويد</div>
+                    </div>
+                    <div class="platform-option" data-platform="ios" onclick="togglePlatform(this)">
+                        <div class="platform-icon"><i class="fab fa-apple"></i></div>
+                        <div class="platform-name">iOS</div>
+                    </div>
+                    <div class="platform-option" data-platform="windows" onclick="togglePlatform(this)">
+                        <div class="platform-icon"><i class="fab fa-windows"></i></div>
+                        <div class="platform-name">ويندوز</div>
+                    </div>
+                    <div class="platform-option" data-platform="mac" onclick="togglePlatform(this)">
+                        <div class="platform-icon"><i class="fab fa-apple"></i></div>
+                        <div class="platform-name">ماك</div>
+                    </div>
+                    <div class="platform-option" data-platform="linux" onclick="togglePlatform(this)">
+                        <div class="platform-icon"><i class="fab fa-linux"></i></div>
+                        <div class="platform-name">لينكس</div>
+                    </div>
+                </div>
+                
+                <!-- حقول إدخال الإصدارات -->
+                <div class="version-inputs" id="versionInputs">
+                    <!-- سيتم إضافة حقول الإصدارات هنا -->
+                </div>
+            </div>
             
             <div class="form-group">
                 <label><i class="fas fa-images"></i> صور التطبيق</label>
@@ -793,7 +935,7 @@
             
             <div class="form-group">
                 <label for="appFile"><i class="fas fa-file"></i> ملف التطبيق</label>
-                <input type="file" id="appFile" accept=".apk,.ipa,.exe,.dmg,.zip">
+                <input type="file" id="appFile" accept=".apk,.ipa,.exe,.dmg,.deb,.appimage,.zip">
             </div>
             
             <button id="publishAppBtn" class="btn btn-primary btn-full">
@@ -881,10 +1023,12 @@ let userRole = null;
 let selectedAppImages = [];
 let currentAppDetails = null;
 let allApps = [];
+let selectedPlatforms = {};
 
 // عناصر DOM
 const welcomeScreen = document.getElementById('welcomeScreen');
 const developerAuth = document.getElementById('developerAuth');
+const developerLogin = document.getElementById('developerLogin');
 const userAuth = document.getElementById('userAuth');
 const developerDashboard = document.getElementById('developerDashboard');
 const userDashboard = document.getElementById('userDashboard');
@@ -909,6 +1053,7 @@ function initializeApp() {
 function setupEventListeners() {
     // أحداث المطور
     document.getElementById('devRegisterBtn').addEventListener('click', registerDeveloper);
+    document.getElementById('devLoginBtn').addEventListener('click', loginDeveloper);
     
     // أحداث المستخدم
     document.getElementById('userRegisterBtn').addEventListener('click', registerUser);
@@ -959,12 +1104,21 @@ function registerDeveloper() {
         return;
     }
     
+    // التحقق من عدم وجود حساب بنفس البريد
+    const users = JSON.parse(localStorage.getItem('capncom_users') || '[]');
+    const existingUser = users.find(user => user.email === email && user.role === 'developer');
+    
+    if (existingUser) {
+        showMessage('devAuthMsg', 'هذا البريد الإلكتروني مستخدم بالفعل', 'danger');
+        return;
+    }
+    
     // إنشاء حساب المطور
     const developer = {
         id: generateId(),
         name: name,
         email: email,
-        password: password, // في التطبيق الحقيقي يجب تشفير كلمة المرور
+        password: password,
         role: 'developer',
         createdAt: new Date().toISOString()
     };
@@ -978,6 +1132,28 @@ function registerDeveloper() {
     setTimeout(() => {
         showDeveloperDashboard();
     }, 1500);
+}
+
+// تسجيل الدخول للمطور
+function loginDeveloper() {
+    const email = document.getElementById('devLoginEmail').value;
+    const password = document.getElementById('devLoginPassword').value;
+    
+    if (!email || !password) {
+        showMessage('devLoginMsg', 'يرجى ملء جميع الحقول', 'danger');
+        return;
+    }
+    
+    const users = JSON.parse(localStorage.getItem('capncom_users') || '[]');
+    const developer = users.find(user => user.email === email && user.password === password && user.role === 'developer');
+    
+    if (developer) {
+        currentUser = developer;
+        saveUser(developer);
+        showDeveloperDashboard();
+    } else {
+        showMessage('devLoginMsg', 'البريد الإلكتروني أو كلمة المرور غير صحيحة', 'danger');
+    }
 }
 
 // تسجيل المستخدم
@@ -1054,6 +1230,86 @@ function showUserDashboard() {
     setupSearch();
 }
 
+// تبديل نظام التشغيل
+function togglePlatform(element) {
+    const platform = element.dataset.platform;
+    element.classList.toggle('selected');
+    
+    if (element.classList.contains('selected')) {
+        selectedPlatforms[platform] = '';
+        showVersionInput(platform);
+    } else {
+        delete selectedPlatforms[platform];
+        hideVersionInput(platform);
+    }
+    
+    updateVersionInputsVisibility();
+}
+
+// عرض حقل إدخال الإصدار
+function showVersionInput(platform) {
+    const versionInputs = document.getElementById('versionInputs');
+    const inputId = `${platform}Version`;
+    
+    if (!document.getElementById(inputId)) {
+        const versionInput = document.createElement('div');
+        versionInput.className = 'version-input';
+        versionInput.innerHTML = `
+            <label for="${inputId}">
+                <i class="fab fa-${platform}"></i>
+                ${getPlatformName(platform)} - أدخل الإصدار المطلوب
+            </label>
+            <input type="text" id="${inputId}" placeholder="${getVersionPlaceholder(platform)}">
+        `;
+        versionInputs.appendChild(versionInput);
+    }
+}
+
+// إخفاء حقل إدخال الإصدار
+function hideVersionInput(platform) {
+    const inputId = `${platform}Version`;
+    const inputElement = document.getElementById(inputId);
+    if (inputElement) {
+        inputElement.parentElement.remove();
+    }
+}
+
+// تحديث ظهور حقول الإصدارات
+function updateVersionInputsVisibility() {
+    const versionInputs = document.getElementById('versionInputs');
+    const selectedCount = Object.keys(selectedPlatforms).length;
+    
+    if (selectedCount > 0) {
+        versionInputs.style.display = 'block';
+    } else {
+        versionInputs.style.display = 'none';
+    }
+}
+
+// الحصول على اسم النظام
+function getPlatformName(platform) {
+    const names = {
+        android: 'أندرويد',
+        ios: 'iOS',
+        windows: 'ويندوز',
+        mac: 'ماك',
+        linux: 'لينكس'
+    };
+    return names[platform] || platform;
+}
+
+// الحصول على النص المساعد للإصدار
+function getVersionPlaceholder(platform) {
+    const placeholders = {
+        android: 'مثال: أندرويد 5.0 أو أعلى',
+        ios: 'مثال: iOS 12.0 أو أعلى',
+        windows: 'مثال: Windows 10 أو أعلى',
+        mac: 'مثال: macOS 10.14 أو أعلى',
+        linux: 'مثال: Ubuntu 18.04 أو أعلى'
+    };
+    return placeholders[platform] || 'أدخل الإصدار المطلوب';
+}
+
 // إعداد رفع التطبيق
 function setupAppUpload() {
     const appImagesInput = document.getElementById('appImages');
@@ -1102,6 +1358,19 @@ function publishApp() {
         return;
     }
     
+    if (Object.keys(selectedPlatforms).length === 0) {
+        showMessage('uploadMsg', 'يرجى اختيار نظام تشغيل واحد على الأقل', 'danger');
+        return;
+    }
+    
+    // جمع إصدارات الأنظمة
+    Object.keys(selectedPlatforms).forEach(platform => {
+        const versionInput = document.getElementById(`${platform}Version`);
+        if (versionInput) {
+            selectedPlatforms[platform] = versionInput.value;
+        }
+    });
+
     // محاكاة رفع الملف
     const uploadProgress = document.getElementById('uploadProgress');
     const progressBar = document.getElementById('progressBar');
@@ -1131,6 +1400,7 @@ function publishApp() {
                 fileName: appFile.name,
                 fileSize: appFile.size,
                 images: selectedAppImages.map(file => URL.createObjectURL(file)),
+                platforms: {...selectedPlatforms},
                 developerId: currentUser.id,
                 developerName: currentUser.name,
                 uploadDate: new Date().toLocaleString('ar-SA'),
@@ -1145,12 +1415,7 @@ function publishApp() {
             uploadProgress.style.display = 'none';
             
             // إعادة تعيين النموذج
-            document.getElementById('appName').value = '';
-            document.getElementById('appDescription').value = '';
-            document.getElementById('appFile').value = '';
-            document.getElementById('appImages').value = '';
-            document.getElementById('imagePreview').innerHTML = '';
-            selectedAppImages = [];
+            resetUploadForm();
             
             // إعادة تحميل التطبيقات
             loadDeveloperApps();
@@ -1225,6 +1490,14 @@ function createAppElement(app, isDeveloper) {
     
     const firstImage = app.images && app.images.length > 0 ? app.images[0] : null;
     
+    // إنشاء badges للأنظمة المتوافقة
+    const platformsHtml = Object.entries(app.platforms || {}).map(([platform, version]) => `
+        <span class="compatibility-badge" title="${version}">
+            <i class="fab fa-${platform}"></i>
+            ${getPlatformName(platform)}${version ? ` ${version}` : ''}
+        </span>
+    `).join('');
+    
     appCard.innerHTML = `
         <div class="app-image" style="${firstImage ? `background-image: url('${firstImage}'); background-size: cover;` : ''}">
             ${!firstImage ? '<i class="fas fa-mobile-alt"></i>' : ''}
@@ -1233,6 +1506,9 @@ function createAppElement(app, isDeveloper) {
             <div class="app-name">${app.name}</div>
             <div class="app-developer">بواسطة: ${app.developerName}</div>
             <div class="app-description">${app.description}</div>
+            <div class="platforms" style="margin-bottom: 10px;">
+                ${platformsHtml}
+            </div>
             <div class="app-meta">
                 <span><i class="fas fa-download"></i> ${app.downloads || 0}</span>
                 <span><i class="far fa-calendar"></i> ${app.uploadDate}</span>
@@ -1253,6 +1529,14 @@ function showAppDetails(app) {
         <div class="screenshot" style="background-image: url('${img}'); background-size: cover;"></div>
     `).join('') : '';
     
+    // إنشاء badges للأنظمة المتوافقة
+    const platformsHtml = Object.entries(app.platforms || {}).map(([platform, version]) => `
+        <span class="compatibility-badge">
+            <i class="fab fa-${platform}"></i>
+            ${getPlatformName(platform)}${version ? ` - ${version}` : ''}
+        </span>
+    `).join('');
+    
     appDetailsContent.innerHTML = `
         <div class="app-details">
             <div class="app-hero" style="${app.images && app.images[0] ? `background-image: url('${app.images[0]}'); background-size: cover;` : ''}">
@@ -1266,6 +1550,11 @@ function showAppDetails(app) {
             <div class="app-content">
                 <h3>عن التطبيق</h3>
                 <p>${app.description}</p>
+                
+                <h3>الأنظمة المتوافقة</h3>
+                <div class="platforms">
+                    ${platformsHtml}
+                </div>
                 
                 ${app.images && app.images.length > 1 ? `
                 <h3>الصور</h3>
@@ -1324,9 +1613,27 @@ function handleSearch(e) {
     });
 }
 
+// إعادة تعيين نموذج الرفع
+function resetUploadForm() {
+    document.getElementById('appName').value = '';
+    document.getElementById('appDescription').value = '';
+    document.getElementById('appFile').value = '';
+    document.getElementById('appImages').value = '';
+    document.getElementById('imagePreview').innerHTML = '';
+    selectedAppImages = [];
+    
+    // إعادة تعيين الأنظمة
+    document.querySelectorAll('.platform-option.selected').forEach(option => {
+        option.classList.remove('selected');
+    });
+    selectedPlatforms = {};
+    document.getElementById('versionInputs').innerHTML = '';
+    document.getElementById('versionInputs').style.display = 'none';
+}
+
 // الدوال المساعدة
 function showScreen(screenName) {
-    const screens = ['welcomeScreen', 'developerAuth', 'userAuth', 'developerDashboard', 'userDashboard', 'appDetails'];
+    const screens = ['welcomeScreen', 'developerAuth', 'developerLogin', 'userAuth', 'developerDashboard', 'userDashboard', 'appDetails'];
     screens.forEach(screen => {
         document.getElementById(screen).style.display = 'none';
     });
@@ -1402,14 +1709,19 @@ function logout() {
 }
 
 function showDeveloperLogin() {
-    // يمكن إضافة منطق تسجيل الدخول للمطورين هنا
-    showMessage('devAuthMsg', 'سيتم إضافة خاصية تسجيل الدخول قريباً', 'info');
+    showScreen('developerLogin');
+}
+
+function showDeveloperRegister() {
+    showScreen('developerAuth');
 }
 
 // جعل الدوال متاحة عالمياً
 window.selectRole = selectRole;
 window.showDeveloperLogin = showDeveloperLogin;
+window.showDeveloperRegister = showDeveloperRegister;
 window.loginAsAnonymousUser = loginAsAnonymousUser;
+window.togglePlatform = togglePlatform;
 window.removeImage = removeImage;
 window.downloadApp = downloadApp;
 window.goBack = goBack;
