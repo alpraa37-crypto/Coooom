@@ -1357,7 +1357,7 @@ function handleImageUpload(event) {
     });
 }
 
-// نشر التطبيق
+// نشر التطبيق - الإصدار المُصلح
 async function publishApp() {
     console.log("جاري نشر التطبيق...");
     
@@ -1388,7 +1388,7 @@ async function publishApp() {
         }
     });
 
-    // محاكاة رفع الملف
+    // إعداد شريط التقدم
     const uploadProgress = document.getElementById('uploadProgress');
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
@@ -1399,59 +1399,104 @@ async function publishApp() {
     progressText.textContent = '0%';
     
     try {
-        // محاكاة التقدم
-        for (let i = 0; i <= 100; i += 10) {
-            await new Promise(resolve => setTimeout(resolve, 200));
-            progressBar.style.width = `${i}%`;
-            progressText.textContent = `${i}%`;
-        }
-
-        // رفع ملف التطبيق إلى Firebase Storage
+        // تعطيل زر النشر أثناء الرفع
+        document.getElementById('publishAppBtn').disabled = true;
+        
+        // رفع ملف التطبيق إلى Firebase Storage مع مراقبة التقدم
         const appFileRef = storage.ref().child(`apps/${currentUser.id}/${Date.now()}_${appFile.name}`);
-        await appFileRef.put(appFile);
-        const appFileUrl = await appFileRef.getDownloadURL();
-
-        // رفع الصور إلى Firebase Storage
-        const imageUrls = [];
-        for (const imageFile of selectedAppImages) {
-            const imageRef = storage.ref().child(`apps/${currentUser.id}/images/${Date.now()}_${imageFile.name}`);
-            await imageRef.put(imageFile);
-            const imageUrl = await imageRef.getDownloadURL();
-            imageUrls.push(imageUrl);
-        }
-
-        // إنشاء التطبيق في Firestore
-        const app = {
-            name: appName,
-            description: appDescription,
-            fileUrl: appFileUrl,
-            fileName: appFile.name,
-            fileSize: appFile.size,
-            images: imageUrls,
-            platforms: {...selectedPlatforms},
-            developerId: currentUser.id,
-            developerName: currentUser.name,
-            uploadDate: new Date().toLocaleString('ar-SA'),
-            downloads: 0,
-            type: 'app',
-            createdAt: new Date().toISOString()
-        };
-
-        await db.collection('apps').add(app);
+        const appFileUploadTask = appFileRef.put(appFile);
         
-        showMessage('uploadMsg', 'تم نشر التطبيق بنجاح!', 'success');
-        uploadProgress.style.display = 'none';
-        
-        // إعادة تعيين النموذج
-        resetUploadForm();
-        
-        // إعادة تحميل التطبيقات
-        loadDeveloperApps();
+        // مراقبة تقدم رفع ملف التطبيق
+        appFileUploadTask.on('state_changed', 
+            (snapshot) => {
+                // تحديث شريط التقدم
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '%';
+            },
+            (error) => {
+                console.error('Error uploading app file:', error);
+                showMessage('uploadMsg', 'حدث خطأ أثناء رفع ملف التطبيق: ' + error.message, 'danger');
+                uploadProgress.style.display = 'none';
+                document.getElementById('publishAppBtn').disabled = false;
+            },
+            async () => {
+                // اكتمال رفع ملف التطبيق
+                const appFileUrl = await appFileUploadTask.snapshot.ref.getDownloadURL();
+                console.log('تم رفع ملف التطبيق بنجاح:', appFileUrl);
+                
+                // رفع الصور إلى Firebase Storage
+                const imageUrls = [];
+                let imagesUploaded = 0;
+                
+                for (const imageFile of selectedAppImages) {
+                    const imageRef = storage.ref().child(`apps/${currentUser.id}/images/${Date.now()}_${imageFile.name}`);
+                    const imageUploadTask = imageRef.put(imageFile);
+                    
+                    try {
+                        await imageUploadTask;
+                        const imageUrl = await imageUploadTask.snapshot.ref.getDownloadURL();
+                        imageUrls.push(imageUrl);
+                        imagesUploaded++;
+                        
+                        // تحديث شريط التقدم للصور
+                        const imageProgress = 50 + (imagesUploaded / selectedAppImages.length) * 50;
+                        progressBar.style.width = imageProgress + '%';
+                        progressText.textContent = Math.round(imageProgress) + '%';
+                        
+                    } catch (error) {
+                        console.error('Error uploading image:', error);
+                        showMessage('uploadMsg', 'حدث خطأ أثناء رفع الصور: ' + error.message, 'danger');
+                        uploadProgress.style.display = 'none';
+                        document.getElementById('publishAppBtn').disabled = false;
+                        return;
+                    }
+                }
+                
+                // إنشاء التطبيق في Firestore
+                const app = {
+                    name: appName,
+                    description: appDescription,
+                    fileUrl: appFileUrl,
+                    fileName: appFile.name,
+                    fileSize: appFile.size,
+                    images: imageUrls,
+                    platforms: {...selectedPlatforms},
+                    developerId: currentUser.id,
+                    developerName: currentUser.name,
+                    uploadDate: new Date().toLocaleString('ar-SA'),
+                    downloads: 0,
+                    type: 'app',
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    await db.collection('apps').add(app);
+                    
+                    showMessage('uploadMsg', 'تم نشر التطبيق بنجاح!', 'success');
+                    uploadProgress.style.display = 'none';
+                    
+                    // إعادة تعيين النموذج
+                    resetUploadForm();
+                    
+                    // إعادة تحميل التطبيقات
+                    loadDeveloperApps();
+                    
+                } catch (error) {
+                    console.error('Error saving app to database:', error);
+                    showMessage('uploadMsg', 'حدث خطأ أثناء حفظ التطبيق في قاعدة البيانات: ' + error.message, 'danger');
+                } finally {
+                    // إعادة تمكين زر النشر
+                    document.getElementById('publishAppBtn').disabled = false;
+                }
+            }
+        );
         
     } catch (error) {
         console.error('Error publishing app:', error);
-        showMessage('uploadMsg', 'حدث خطأ أثناء نشر التطبيق', 'danger');
+        showMessage('uploadMsg', 'حدث خطأ أثناء نشر التطبيق: ' + error.message, 'danger');
         uploadProgress.style.display = 'none';
+        document.getElementById('publishAppBtn').disabled = false;
     }
 }
 
@@ -1665,6 +1710,9 @@ function resetUploadForm() {
     selectedPlatforms = {};
     document.getElementById('versionInputs').innerHTML = '';
     document.getElementById('versionInputs').style.display = 'none';
+    
+    // إعادة تمكين زر النشر
+    document.getElementById('publishAppBtn').disabled = false;
 }
 
 // الدوال المساعدة
