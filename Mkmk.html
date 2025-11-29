@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CapNCom - منصة رفع الملفات المتقدمة</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --primary: #4361ee;
+  --primary-dark: #3a0ca3;
+  --secondary: #7209b7;
+  --accent: #f72585;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --success: #4cc9f0;
+  --danger: #e63946;
+  --warning: #ffbe0b;
+  --gray: #6c757d;
+  --border-radius: 12px;
+  --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+  color: var(--dark);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+  background-size: cover;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 25px;
+  transition: var(--transition);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.card h2, .card h3 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card h2 i, .card h3 i {
+  color: var(--secondary);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: #f9f9f9;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+  background-color: white;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 8px;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--secondary) 0%, #5a08a1 100%);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #5a08a1 0%, #4a077e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 15px rgba(114, 9, 183, 0.3);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger) 0%, #c1121f 100%);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #c1121f 0%, #a4161a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 15px rgba(230, 57, 70, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.file-item {
+  background: var(--light);
+  padding: 18px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition);
+  border-left: 4px solid var(--primary);
+}
+
+.file-item:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+.file-info {
+  flex: 1;
+}
+
+.file-name {
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-desc {
+  color: var(--gray);
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.file-date {
+  color: var(--gray);
+  font-size: 0.8rem;
+}
+
+.file-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.file-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition);
+}
+
+.file-link:hover {
+  color: var(--secondary);
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success) 0%, var(--primary) 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  color: var(--gray);
+}
+
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.divider span {
+  padding: 0 15px;
+  font-size: 0.9rem;
+}
+
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.alert-success {
+  background-color: rgba(76, 201, 240, 0.2);
+  color: #0a9396;
+  border: 1px solid rgba(76, 201, 240, 0.3);
+}
+
+.alert-danger {
+  background-color: rgba(230, 57, 70, 0.1);
+  color: var(--danger);
+  border: 1px solid rgba(230, 57, 70, 0.2);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--gray);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #dee2e6;
+}
+
+#loginDiv, #dashboard {
+  display: none;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.user-email {
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .file-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .file-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- قسم تسجيل الدخول -->
+  <div id="loginDiv" class="card">
+    <div class="header">
+      <h1><i class="fas fa-cloud-upload-alt"></i> CapNCom</h1>
+      <p>منصة رفع الملفات المتقدمة - حلول تخزين سحابي آمنة</p>
+    </div>
+    
+    <div class="card">
+      <h2><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h2>
+      
+      <button id="googleLoginBtn" class="btn btn-secondary btn-full">
+        <i class="fab fa-google"></i> تسجيل دخول باستخدام جوجل
+      </button>
+      
+      <div class="divider">
+        <span>أو</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+        <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني">
+      </div>
+      
+      <div class="form-group">
+        <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
+        <input type="password" id="password" placeholder="أدخل كلمة المرور">
+      </div>
+      
+      <button id="emailLoginBtn" class="btn btn-primary btn-full">
+        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+      </button>
+      
+      <div id="loginMsg" class="alert alert-danger" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- لوحة التحكم -->
+  <div id="dashboard">
+    <div class="header">
+      <h1><i class="fas fa-tachometer-alt"></i> لوحة إدارة CapNCom</h1>
+      <p>إدارة ملفاتك بسهولة وأمان</p>
+    </div>
+    
+    <div class="user-info">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <div class="user-details">
+        <div class="user-name" id="userName">مستخدم</div>
+        <div class="user-email" id="userEmail">user@example.com</div>
+      </div>
+      <button id="logoutBtn" class="btn btn-outline">
+        <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+      </button>
+    </div>
+    
+    <div class="card">
+      <h3><i class="fas fa-file-upload"></i> رفع ملف جديد</h3>
+      
+      <div class="form-group">
+        <label for="fileInput"><i class="fas fa-file"></i> اختيار الملف</label>
+        <input type="file" id="fileInput">
+      </div>
+      
+      <div class="form-group">
+        <label for="fileDesc"><i class="fas fa-align-left"></i> وصف الملف (اختياري)</label>
+        <textarea id="fileDesc" placeholder="أضف وصفًا للملف..." rows="3"></textarea>
+      </div>
+      
+      <button id="uploadBtn" class="btn btn-primary btn-full">
+        <i class="fas fa-cloud-upload-alt"></i> رفع الملف
+      </button>
+      
+      <div id="uploadProgress" class="progress-bar" style="display:none;">
+        <div class="progress" style="width:0%"></div>
+      </div>
+      
+      <div id="uploadMsg" class="alert alert-success" style="display:none;"></div>
+    </div>
+
+    <div class="card">
+      <h3><i class="fas fa-files"></i> الملفات المرفوعة</h3>
+      <div id="fileList">
+        <div class="empty-state">
+          <i class="fas fa-folder-open"></i>
+          <p>لا توجد ملفات مرفوعة بعد</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyBCJETdj6xlMQ07_GogGU7YkrxivUCaLF8",
+  authDomain: "ggni-cec3b.firebaseapp.com",
+  projectId: "ggni-cec3b",
+  storageBucket: "ggni-cec3b.appspot.com",
+  messagingSenderId: "990604244114",
+  appId: "1:990604244114:web:9310948c26ecb3037b224b",
+  measurementId: "G-L862VHWGXV"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth();
+const provider = new GoogleAuthProvider();
+const storage = getStorage();
+const db = getFirestore();
+
+// DOM Elements
+const loginDiv = document.getElementById('loginDiv');
+const dashboard = document.getElementById('dashboard');
+const googleLoginBtn = document.getElementById('googleLoginBtn');
+const emailLoginBtn = document.getElementById('emailLoginBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const loginMsg = document.getElementById('loginMsg');
+const uploadBtn = document.getElementById('uploadBtn');
+const fileInput = document.getElementById('fileInput');
+const fileDesc = document.getElementById('fileDesc');
+const uploadMsg = document.getElementById('uploadMsg');
+const uploadProgress = document.getElementById('uploadProgress');
+const progressBar = uploadProgress.querySelector('.progress');
+const fileListDiv = document.getElementById('fileList');
+const userAvatar = document.getElementById('userAvatar');
+const userName = document.getElementById('userName');
+const userEmail = document.getElementById('userEmail');
+
+// Show dashboard if user logged in
+auth.onAuthStateChanged(user=>{
+  if(user){
+    loginDiv.style.display='none';
+    dashboard.style.display='block';
+    
+    // تحديث معلومات المستخدم
+    if(user.displayName) {
+      userName.textContent = user.displayName;
+      userAvatar.textContent = user.displayName.charAt(0).toUpperCase();
+    } else {
+      userName.textContent = user.email.split('@')[0];
+      userAvatar.textContent = user.email.charAt(0).toUpperCase();
+    }
+    userEmail.textContent = user.email;
+    
+    loadFiles();
+  }else{
+    loginDiv.style.display='block';
+    dashboard.style.display='none';
+  }
+});
+
+// Google Login
+googleLoginBtn.addEventListener('click', ()=>{
+  signInWithPopup(auth, provider)
+    .catch(err=>{ 
+      loginMsg.textContent = err.message; 
+      loginMsg.style.display = 'block';
+    });
+});
+
+// Email Login
+emailLoginBtn.addEventListener('click', ()=>{
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  
+  if(!email || !password) {
+    loginMsg.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور';
+    loginMsg.style.display = 'block';
+    return;
+  }
+  
+  signInWithEmailAndPassword(auth,email,password)
+    .catch(err=>{ 
+      loginMsg.textContent = err.message; 
+      loginMsg.style.display = 'block';
+    });
+});
+
+// Logout
+logoutBtn.addEventListener('click', ()=>{ 
+  signOut(auth); 
+});
+
+// Upload file
+uploadBtn.addEventListener('click', async ()=>{
+  if(fileInput.files.length===0){ 
+    uploadMsg.textContent = 'يرجى اختيار ملف أولاً';
+    uploadMsg.className = 'alert alert-danger';
+    uploadMsg.style.display = 'block';
+    return;
+  }
+  
+  const file = fileInput.files[0];
+  const desc = fileDesc.value;
+
+  // إظهار شريط التقدم
+  uploadProgress.style.display = 'block';
+  progressBar.style.width = '0%';
+  
+  const storageRef = ref(storage,'files/'+Date.now()+'-'+file.name);
+  const uploadTask = uploadBytesResumable(storageRef,file);
+
+  uploadTask.on('state_changed', 
+    (snapshot)=>{
+      const progress = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+      progressBar.style.width = `${Math.round(progress)}%`;
+    }, 
+    (error)=>{ 
+      uploadMsg.className = 'alert alert-danger';
+      uploadMsg.textContent = error.message; 
+      uploadMsg.style.display = 'block';
+      uploadProgress.style.display = 'none';
+    },
+    async ()=>{
+      const url = await getDownloadURL(uploadTask.snapshot.ref);
+      await addDoc(collection(db,'files'),{
+        name:file.name,
+        url:url,
+        description:desc,
+        date:new Date().toLocaleString('ar-SA'),
+        size: formatFileSize(file.size)
+      });
+      
+      uploadMsg.className = 'alert alert-success';
+      uploadMsg.textContent = 'تم رفع الملف بنجاح!';
+      uploadMsg.style.display = 'block';
+      uploadProgress.style.display = 'none';
+      
+      fileInput.value='';
+      fileDesc.value='';
+      loadFiles();
+      
+      // إخفاء الرسالة بعد 3 ثوانٍ
+      setTimeout(() => {
+        uploadMsg.style.display = 'none';
+      }, 3000);
+    }
+  );
+});
+
+// Load files
+async function loadFiles(){
+  fileListDiv.innerHTML = '';
+  const querySnapshot = await getDocs(collection(db,'files'));
+  
+  if(querySnapshot.empty) {
+    fileListDiv.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-folder-open"></i>
+        <p>لا توجد ملفات مرفوعة بعد</p>
+      </div>
+    `;
+    return;
+  }
+  
+  querySnapshot.forEach(docSnap=>{
+    const data = docSnap.data();
+    const div = document.createElement('div');
+    div.className='file-item';
+    div.innerHTML = `
+      <div class="file-info">
+        <div class="file-name">
+          <i class="fas fa-file"></i> ${data.name}
+        </div>
+        <div class="file-desc">${data.description || 'لا يوجد وصف'}</div>
+        <div class="file-date">
+          <i class="far fa-calendar-alt"></i> ${data.date} 
+          ${data.size ? ` | <i class="fas fa-weight-hanging"></i> ${data.size}` : ''}
+        </div>
+      </div>
+      <div class="file-actions">
+        <a href="${data.url}" target="_blank" class="file-link">
+          <i class="fas fa-download"></i> تحميل
+        </a>
+        <button class="btn btn-danger" onclick="deleteFile('${docSnap.id}','${data.name}')">
+          <i class="fas fa-trash"></i> حذف
+        </button>
+      </div>
+    `;
+    fileListDiv.appendChild(div);
+  });
+}
+
+// Delete file
+async function deleteFile(id,name){
+  if(confirm('هل أنت متأكد من حذف هذا الملف؟')){
+    const fileRef = ref(storage,'files/'+name);
+    await deleteObject(fileRef).catch(err=>console.log(err));
+    await deleteDoc(doc(db,'files',id));
+    loadFiles();
+  }
+}
+
+// تنسيق حجم الملف
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+</script>
+
+</body>
+</html>
