@@ -1016,11 +1016,12 @@
     </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
+<script>
 // Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBCJETdj6xlMQ07_GogGU7YkrxivUCaLF8",
@@ -1033,9 +1034,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
 
 // حالة التطبيق
 let currentUser = null;
@@ -1043,15 +1044,6 @@ let userRole = null;
 let selectedAppImages = [];
 let currentAppDetails = null;
 let selectedPlatforms = {};
-
-// عناصر DOM
-const welcomeScreen = document.getElementById('welcomeScreen');
-const developerAuth = document.getElementById('developerAuth');
-const developerLogin = document.getElementById('developerLogin');
-const userAuth = document.getElementById('userAuth');
-const developerDashboard = document.getElementById('developerDashboard');
-const userDashboard = document.getElementById('userDashboard');
-const appDetails = document.getElementById('appDetails');
 
 // التهيئة
 document.addEventListener('DOMContentLoaded', function() {
@@ -1132,7 +1124,7 @@ async function registerDeveloper() {
         };
         
         // حفظ المطور في Firebase
-        await addDoc(collection(db, 'users'), developer);
+        await db.collection('users').add(developer);
         
         // حفظ محلي
         saveUserLocal(developer);
@@ -1161,8 +1153,7 @@ async function loginDeveloper() {
     }
     
     try {
-        const usersQuery = query(collection(db, 'users'));
-        const snapshot = await getDocs(usersQuery);
+        const snapshot = await db.collection('users').get();
         const users = snapshot.docs.map(doc => doc.data());
         
         const developer = users.find(user => 
@@ -1201,7 +1192,7 @@ async function registerUser() {
         };
         
         // حفظ في Firebase
-        await addDoc(collection(db, 'users'), user);
+        await db.collection('users').add(user);
         
         // حفظ محلي
         saveUserLocal(user);
@@ -1409,17 +1400,24 @@ async function publishApp() {
     progressText.textContent = '0%';
     
     try {
+        // محاكاة التقدم
+        for (let i = 0; i <= 100; i += 10) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+            progressBar.style.width = `${i}%`;
+            progressText.textContent = `${i}%`;
+        }
+
         // رفع ملف التطبيق إلى Firebase Storage
-        const appFileRef = ref(storage, `apps/${currentUser.id}/${Date.now()}_${appFile.name}`);
-        await uploadBytes(appFileRef, appFile);
-        const appFileUrl = await getDownloadURL(appFileRef);
+        const appFileRef = storage.ref().child(`apps/${currentUser.id}/${Date.now()}_${appFile.name}`);
+        await appFileRef.put(appFile);
+        const appFileUrl = await appFileRef.getDownloadURL();
 
         // رفع الصور إلى Firebase Storage
         const imageUrls = [];
         for (const imageFile of selectedAppImages) {
-            const imageRef = ref(storage, `apps/${currentUser.id}/images/${Date.now()}_${imageFile.name}`);
-            await uploadBytes(imageRef, imageFile);
-            const imageUrl = await getDownloadURL(imageRef);
+            const imageRef = storage.ref().child(`apps/${currentUser.id}/images/${Date.now()}_${imageFile.name}`);
+            await imageRef.put(imageFile);
+            const imageUrl = await imageRef.getDownloadURL();
             imageUrls.push(imageUrl);
         }
 
@@ -1440,7 +1438,7 @@ async function publishApp() {
             createdAt: new Date().toISOString()
         };
 
-        await addDoc(collection(db, 'apps'), app);
+        await db.collection('apps').add(app);
         
         showMessage('uploadMsg', 'تم نشر التطبيق بنجاح!', 'success');
         uploadProgress.style.display = 'none';
@@ -1463,8 +1461,7 @@ async function loadDeveloperApps() {
     const appsList = document.getElementById('developerAppsList');
     
     try {
-        const appsQuery = query(collection(db, 'apps'));
-        const snapshot = await getDocs(appsQuery);
+        const snapshot = await db.collection('apps').get();
         const allApps = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         const developerApps = allApps.filter(app => app.developerId === currentUser.id);
@@ -1497,8 +1494,7 @@ async function loadAllApps() {
     const appsGrid = document.getElementById('appsGrid');
     
     try {
-        const appsQuery = query(collection(db, 'apps'), orderBy('createdAt', 'desc'));
-        const snapshot = await getDocs(appsQuery);
+        const snapshot = await db.collection('apps').orderBy('createdAt', 'desc').get();
         const allApps = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         if (allApps.length === 0) {
@@ -1621,8 +1617,8 @@ function showAppDetails(app) {
 async function downloadApp(fileUrl, fileName, appId) {
     try {
         // زيادة عداد التحميلات
-        const appRef = doc(db, 'apps', appId);
-        await updateDoc(appRef, {
+        const appRef = db.collection('apps').doc(appId);
+        await appRef.update({
             downloads: (currentAppDetails.downloads || 0) + 1
         });
         
